@@ -1,0 +1,61 @@
+import 'package:flutter/material.dart';
+import 'package:leadstudy/component/constants.dart';
+import 'package:leadstudy/service/account_service.dart';
+
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
+
+  @override
+  State<RegisterPage> createState() => _RegisterPageState();
+}
+
+class _RegisterPageState extends State<RegisterPage> {
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  final _accountViewModel = AccountService();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("サインアップ"),
+      ),
+      body: ListView(
+        padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 12),
+        children: [
+          const Text("サインインに使用するメールアドレスを入力してください"),
+          TextFormField(
+            controller: _emailController,
+            decoration: const InputDecoration(labelText: "Email"),
+          ),
+          const SizedBox(
+            height: 18,
+          ),
+          TextFormField(
+            controller: _passwordController,
+            obscureText: true,
+            decoration: const InputDecoration(labelText: "Password"),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          ElevatedButton(
+              onPressed: () async {
+                final String? loginResult = await _accountViewModel.signUp(
+                    _emailController.text, _passwordController.text);
+                if (!mounted) return;
+                if (loginResult == null) {
+                  await Navigator.of(context).pushReplacementNamed('/home');
+                } else if (loginResult == "") {
+                  context.showErrorSnackBar(message: "何らかのエラーが発生しました。");
+                } else {
+                  context.showErrorSnackBar(message: loginResult);
+                }
+              },
+              child: const Text("ユーザー登録")),
+        ],
+      ),
+    );
+  }
+}

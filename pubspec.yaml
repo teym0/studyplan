@@ -1,0 +1,48 @@
+name: leadstudy
+description: A study plan app
+
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=2.19.0 <3.0.0'
+
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  hooks_riverpod:
+  state_notifier:
+  supabase_flutter: 
+  cupertino_icons: 
+  freezed_annotation: 
+  flutter_dotenv: 
+  image_picker: 
+  cached_network_image: 
+  intl: 
+  fl_chart: 
+  tuple: 
+  percent_indicator: 
+  flutter_launcher_icons: ^0.13.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  build_runner:
+  freezed:
+  json_serializable:
+  flutter_lints: ^2.0.0
+
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - .env
+
+flutter_icons:
+   android: false
+   ios: true
+   image_path: 'assets/images/icon.png'
+   remove_alpha_ios: true
