@@ -19,15 +19,21 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("サインアップ"),
+        title: const Text("ユーザー登録"),
       ),
       body: ListView(
-        padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 12),
+        padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 20),
         children: [
           const Text("サインインに使用するメールアドレスを入力してください"),
+          const SizedBox(
+            height: 10,
+          ),
           TextFormField(
             controller: _emailController,
-            decoration: const InputDecoration(labelText: "Email"),
+            decoration: const InputDecoration(
+              labelText: "メールアドレス",
+              border: OutlineInputBorder(),
+            ),
           ),
           const SizedBox(
             height: 18,
@@ -35,12 +41,15 @@ class _RegisterPageState extends State<RegisterPage> {
           TextFormField(
             controller: _passwordController,
             obscureText: true,
-            decoration: const InputDecoration(labelText: "Password"),
+            decoration: const InputDecoration(
+              labelText: "パスワード",
+              border: OutlineInputBorder(),
+            ),
           ),
           const SizedBox(
             height: 20,
           ),
-          ElevatedButton(
+          FilledButton(
               onPressed: () async {
                 final String? loginResult = await _accountViewModel.signUp(
                     _emailController.text, _passwordController.text);
