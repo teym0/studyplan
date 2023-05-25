@@ -101,7 +101,7 @@ class GoalCellsViewModel extends StateNotifier<AsyncValue<List<GoalCell>>> {
       supabase.auth.currentUser!.id,
       goal.bookId,
       goal.startedAt,
-      DateTime.now(),
+      goal.startedAt.add(Duration(days: goal.day)),
     );
     for (var item in records) {
       final record = Record.fromJson(item);
