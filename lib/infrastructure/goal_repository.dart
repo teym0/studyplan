@@ -17,4 +17,9 @@ class GoalRepository {
   Future<void> deleteItem(Goal goal) async {
     await supabase.from("goals").delete().match(goal.toJson());
   }
+
+  Future<void> closeItem(Goal goal) async {
+    Goal newGoal = goal.copyWith(reflected: true);
+    await supabase.from("goals").upsert(newGoal);
+  }
 }
