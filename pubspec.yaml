@@ -26,6 +26,7 @@ dependencies:
   percent_indicator: 
   flutter_launcher_icons: ^0.13.1
   awesome_dialog: ^3.0.2
+  collection: ^1.17.2
 
 
 dev_dependencies:
