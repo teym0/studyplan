@@ -54,50 +54,57 @@ Widget detailTabView(BuildContext context, Book book, List<Goal> goals) {
                       ),
                     ],
                   ),
-                  Row(
-                    children: [
-                      IconButton(
-                          onPressed: () {
-                            showCupertinoModalPopup(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return CupertinoActionSheet(
-                                  actions: [
-                                    CupertinoActionSheetAction(
-                                      child: const Text(
-                                        'あきらめる',
-                                        style: TextStyle(color: Colors.red),
-                                      ),
-                                      onPressed: () {
-                                        ref
-                                            .read(goalsServiceProvider)
-                                            .giveUp(goal);
-                                        Navigator.of(context).pop();
-                                      },
-                                    ),
-                                  ],
-                                  cancelButton: CupertinoButton(
-                                    child: const Text('キャンセル'),
-                                    onPressed: () =>
-                                        Navigator.of(context).pop(),
-                                  ),
+                  (remaining >= 0)
+                      ? Row(
+                          children: [
+                            IconButton(
+                                onPressed: () {
+                                  showCupertinoModalPopup(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return CupertinoActionSheet(
+                                        actions: [
+                                          CupertinoActionSheetAction(
+                                            child: const Text(
+                                              'あきらめる',
+                                              style:
+                                                  TextStyle(color: Colors.red),
+                                            ),
+                                            onPressed: () {
+                                              ref
+                                                  .read(goalsServiceProvider)
+                                                  .giveUp(goal);
+                                              Navigator.of(context).pop();
+                                            },
+                                          ),
+                                        ],
+                                        cancelButton: CupertinoButton(
+                                          child: const Text('キャンセル'),
+                                          onPressed: () =>
+                                              Navigator.of(context).pop(),
+                                        ),
+                                      );
+                                    },
+                                  );
+                                },
+                                icon: const Icon(Icons.edit)),
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.of(context).pushNamed(
+                                  "/new_record",
+                                  arguments: AddRecordScreenArgument(
+                                      book: book, goal: goal),
                                 );
                               },
-                            );
+                              child: const Text("記録"),
+                            ),
+                          ],
+                        )
+                      : ElevatedButton(
+                          onPressed: () {
+                            ref.read(goalsServiceProvider).close(goal);
                           },
-                          icon: const Icon(Icons.edit)),
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.of(context).pushNamed(
-                            "/new_record",
-                            arguments:
-                                AddRecordScreenArgument(book: book, goal: goal),
-                          );
-                        },
-                        child: const Text("記録"),
-                      ),
-                    ],
-                  ),
+                          child: const Text("閉じる")),
                 ],
               ),
               (remaining >= 0)

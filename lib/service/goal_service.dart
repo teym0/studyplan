@@ -29,6 +29,10 @@ class GoalsService {
     await goalRepository.deleteItem(goal);
   }
 
+  Future<void> close(Goal goal) async {
+    await goalRepository.closeItem(goal);
+  }
+
   Future<Tuple2<List<int>, double>> getTaskInformationFromGoal(
       Goal goal) async {
     // 範囲をリストに展開

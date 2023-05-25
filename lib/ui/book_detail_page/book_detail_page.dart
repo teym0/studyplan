@@ -24,7 +24,7 @@ class BookDetailPage extends HookConsumerWidget {
     final records = ref.watch(recordListProvider);
     final sections = ref.watch(sectionListProvider);
     final goals = ref.watch(goalsProvider.select((goals) => (goals.value ?? [])
-        .where((goal) => goal.bookId == argument.book.id)
+        .where((goal) => (goal.bookId == argument.book.id) && !goal.reflected)
         .toList()));
 
     return DefaultTabController(
