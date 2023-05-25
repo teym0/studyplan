@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:leadstudy/service/goal_service.dart';
 
@@ -97,14 +98,19 @@ class GoalCellsViewModel extends StateNotifier<AsyncValue<List<GoalCell>>> {
     }
     // 入力された記録の範囲
     final List records = await recordRepository.selectRangeItem(
-        supabase.auth.currentUser!.id,
-        goal.bookId,
-        goal.startedAt,
-        DateTime.now());
+      supabase.auth.currentUser!.id,
+      goal.bookId,
+      goal.startedAt,
+      goal.startedAt.add(Duration(days: goal.day)),
+    );
     for (var item in records) {
       final record = Record.fromJson(item);
       for (int i = record.start; i < (record.last + 1); i++) {
-        final searchResult = pages.firstWhere((item) => item.number == i);
+        final GoalCell? searchResult =
+            pages.firstWhereOrNull((item) => item.number == i);
+        if (searchResult == null) {
+          continue;
+        }
         int tupleIndex = pages.indexOf(searchResult);
         GoalCell newCellData = GoalCell(
           number: searchResult.number,
