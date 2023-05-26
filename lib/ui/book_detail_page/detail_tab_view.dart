@@ -31,19 +31,13 @@ Widget detailTabView(BuildContext context, Book book, List<Goal> goals) {
           ),
           borderRadius: const BorderRadius.all(Radius.circular(12)),
         ),
-        // width: double.infinity,
-        // decoration: BoxDecoration(
-        //   border: Border.all(width: 1, color: const Color(0xebf0f1ff)),
-        //   borderRadius: BorderRadius.circular(20),
-        //   color: Colors.white,
-        // ),
         child: Padding(
           padding: const EdgeInsets.all(12.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Row(
@@ -51,7 +45,7 @@ Widget detailTabView(BuildContext context, Book book, List<Goal> goals) {
                     children: [
                       Text(
                         "${goal.start}~${goal.last}",
-                        style: const TextStyle(fontSize: 32),
+                        style: const TextStyle(fontSize: 24),
                       ),
                       Text(
                         "($amount)",
@@ -114,10 +108,7 @@ Widget detailTabView(BuildContext context, Book book, List<Goal> goals) {
                 ],
               ),
               (remaining >= 0)
-                  ? Text(
-                      "残り: $remaining日",
-                      style: const TextStyle(fontSize: 14, color: Colors.grey),
-                    )
+                  ? Container()
                   : Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -132,20 +123,64 @@ Widget detailTabView(BuildContext context, Book book, List<Goal> goals) {
                         ),
                       ],
                     ),
+              const Divider(),
+              const SizedBox(
+                height: 20,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Column(
+                    children: [
+                      const Text(
+                        "残り日数",
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            "$remaining",
+                            style: const TextStyle(fontSize: 50),
+                          ),
+                          const SizedBox(width: 5),
+                          const Text(
+                            "日",
+                            style: TextStyle(fontSize: 20),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      const Text(
+                        "本日残り",
+                        style: TextStyle(
+                          fontSize: 20,
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            "${taskInformation.item1.length}",
+                            style: const TextStyle(
+                              fontSize: 50,
+                            ),
+                          ),
+                          const SizedBox(width: 5),
+                          Text(
+                            book.unitName,
+                            style: const TextStyle(fontSize: 20),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  (remaining >= 0)
-                      ? Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            (taskInformation.item1.isEmpty)
-                                ? const Text("本日分は完了しました!")
-                                : Text(
-                                    "今日の推奨タスク: ${taskInformation.item1.join(", ")}"),
-                          ],
-                        )
-                      : Container(),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 15.0),
                     child: LinearPercentIndicator(
@@ -155,6 +190,7 @@ Widget detailTabView(BuildContext context, Book book, List<Goal> goals) {
                       animationDuration: 400,
                       percent: taskInformation.item2,
                       progressColor: Theme.of(context).colorScheme.primary,
+                      backgroundColor: Colors.grey.shade200,
                     ),
                   ),
                 ],

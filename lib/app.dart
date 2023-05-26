@@ -21,9 +21,9 @@ class MyApp extends HookConsumerWidget {
       title: "LeadStudy",
       initialRoute: "/",
       theme: ThemeData(
-        useMaterial3: true,
-        colorSchemeSeed: Colors.blue,
-      ),
+          useMaterial3: true,
+          colorSchemeSeed: Colors.blue,
+          fontFamily: "LINESeedJP"),
       debugShowCheckedModeBanner: false,
       onGenerateRoute: (settings) {
         switch (settings.name) {
