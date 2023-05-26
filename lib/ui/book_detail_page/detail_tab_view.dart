@@ -22,14 +22,21 @@ Widget detailTabView(BuildContext context, Book book, List<Goal> goals) {
         .inDays;
     final int amount = goal.last - goal.start + 1;
     return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-          border: Border.all(width: 1, color: const Color(0xebf0f1ff)),
-          borderRadius: BorderRadius.circular(20),
-          color: Colors.white,
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      child: Card(
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          side: BorderSide(
+            color: Theme.of(context).colorScheme.outline,
+          ),
+          borderRadius: const BorderRadius.all(Radius.circular(12)),
         ),
+        // width: double.infinity,
+        // decoration: BoxDecoration(
+        //   border: Border.all(width: 1, color: const Color(0xebf0f1ff)),
+        //   borderRadius: BorderRadius.circular(20),
+        //   color: Colors.white,
+        // ),
         child: Padding(
           padding: const EdgeInsets.all(12.0),
           child: Column(
@@ -44,8 +51,7 @@ Widget detailTabView(BuildContext context, Book book, List<Goal> goals) {
                     children: [
                       Text(
                         "${goal.start}~${goal.last}",
-                        style: const TextStyle(
-                            fontSize: 24, fontWeight: FontWeight.bold),
+                        style: const TextStyle(fontSize: 32),
                       ),
                       Text(
                         "($amount)",
@@ -88,7 +94,7 @@ Widget detailTabView(BuildContext context, Book book, List<Goal> goals) {
                                   );
                                 },
                                 icon: const Icon(Icons.edit)),
-                            ElevatedButton(
+                            FilledButton(
                               onPressed: () {
                                 Navigator.of(context).pushNamed(
                                   "/new_record",
@@ -170,17 +176,9 @@ Widget detailTabView(BuildContext context, Book book, List<Goal> goals) {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
+              SizedBox(
                 width: 90,
                 height: 120,
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
-                        blurRadius: 8.0,
-                        offset: const Offset(0, 5)),
-                  ],
-                ),
                 child: (book.imageUrl == null)
                     ? Container()
                     : CachedNetworkImage(
@@ -200,21 +198,6 @@ Widget detailTabView(BuildContext context, Book book, List<Goal> goals) {
                       ),
                       const SizedBox(
                         height: 10,
-                      ),
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.book,
-                            color: Colors.grey.shade700,
-                          ),
-                          Text(
-                            book.amount.toString(),
-                            style: const TextStyle(fontSize: 16),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 5,
                       ),
                     ],
                   ),

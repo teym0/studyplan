@@ -25,13 +25,20 @@ class BooksListPage extends HookConsumerWidget {
       itemBuilder: ((context, index) {
         return Padding(
           padding: const EdgeInsets.all(2.0),
-          child: Container(
-            decoration: BoxDecoration(
-              border: Border.all(width: 1, color: const Color(0xebf0f1ff)),
-              borderRadius: BorderRadius.circular(10),
-              color: Colors.white,
+          child: Card(
+            elevation: 0,
+            shape: RoundedRectangleBorder(
+              side: BorderSide(
+                color: Theme.of(context).colorScheme.outline,
+              ),
+              borderRadius: const BorderRadius.all(Radius.circular(12)),
             ),
-            padding: const EdgeInsets.all(4),
+            // decoration: BoxDecoration(
+            //   border: Border.all(width: 1, color: const Color(0xebf0f1ff)),
+            //   borderRadius: BorderRadius.circular(10),
+            //   color: Colors.white,
+            // ),
+            // padding: const EdgeInsets.all(4),
             child: InkWell(
               onTap: (() {
                 ref
@@ -96,7 +103,6 @@ class BooksListPage extends HookConsumerWidget {
       appBar: AppBar(
         title: const Text(
           "教材一覧",
-          style: TextStyle(fontWeight: FontWeight.normal, fontSize: 18),
         ),
         actions: [
           IconButton(

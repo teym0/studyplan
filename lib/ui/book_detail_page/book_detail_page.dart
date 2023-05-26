@@ -33,17 +33,26 @@ class BookDetailPage extends HookConsumerWidget {
       child: Scaffold(
         appBar: AppBar(
           title: Text(argument.book.title),
+          actions: [
+            IconButton(
+                onPressed: () {}, icon: const Icon(Icons.share_outlined)),
+            IconButton(
+                onPressed: () {}, icon: const Icon(Icons.more_vert_outlined)),
+          ],
           elevation: 0,
           bottom: const TabBar(
             tabs: <Widget>[
               Tab(
-                text: "ヒートマップ",
+                text: "マップ",
+                icon: Icon(Icons.dashboard_outlined),
               ),
               Tab(
                 text: "情報",
+                icon: Icon(Icons.info_outlined),
               ),
               Tab(
                 text: "履歴",
+                icon: Icon(Icons.history_outlined),
               ),
             ],
           ),
