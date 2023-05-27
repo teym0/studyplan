@@ -11,8 +11,8 @@ class GoalsService {
   final goalRepository = GoalRepository();
   final recordRepository = RecordRepository();
 
-  Future<void> addItem(
-      Book book, String start, String last, String periodDays) async {
+  Future<void> addItem(Book book, String start, String last, String periodDays,
+      String dayratio) async {
     final goal = Goal(
       startedAt: DateTime.now(),
       start: int.parse(start),
@@ -21,7 +21,7 @@ class GoalsService {
       reflected: false,
       userId: supabase.auth.currentUser!.id,
       bookId: book.id!,
-      dayratio: "1111111",
+      dayratio: dayratio,
     );
     await goalRepository.createItem(goal);
   }

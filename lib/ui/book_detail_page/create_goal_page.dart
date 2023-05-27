@@ -205,6 +205,10 @@ class _CreateGoalPageState extends ConsumerState<CreateGoalPage> {
                               startController.text,
                               lastController.text,
                               periodDaysController.text,
+                              ref
+                                  .read(goalRatioBoardProvider)
+                                  .join()
+                                  .toString(),
                             );
                         Navigator.of(context).pop();
                       },
