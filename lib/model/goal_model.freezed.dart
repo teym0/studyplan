@@ -39,6 +39,8 @@ mixin _$Goal {
   String get userId => throw _privateConstructorUsedError;
   @JsonKey(name: 'book_id')
   int get bookId => throw _privateConstructorUsedError;
+  @JsonKey(name: 'dayratio')
+  String get dayratio => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -59,7 +61,8 @@ abstract class $GoalCopyWith<$Res> {
       @JsonKey(name: 'start') int start,
       @JsonKey(name: 'last') int last,
       @JsonKey(name: 'user_id') String userId,
-      @JsonKey(name: 'book_id') int bookId});
+      @JsonKey(name: 'book_id') int bookId,
+      @JsonKey(name: 'dayratio') String dayratio});
 }
 
 /// @nodoc
@@ -84,6 +87,7 @@ class _$GoalCopyWithImpl<$Res, $Val extends Goal>
     Object? last = null,
     Object? userId = null,
     Object? bookId = null,
+    Object? dayratio = null,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
@@ -122,6 +126,10 @@ class _$GoalCopyWithImpl<$Res, $Val extends Goal>
           ? _value.bookId
           : bookId // ignore: cast_nullable_to_non_nullable
               as int,
+      dayratio: null == dayratio
+          ? _value.dayratio
+          : dayratio // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 }
@@ -141,7 +149,8 @@ abstract class _$$_GoalCopyWith<$Res> implements $GoalCopyWith<$Res> {
       @JsonKey(name: 'start') int start,
       @JsonKey(name: 'last') int last,
       @JsonKey(name: 'user_id') String userId,
-      @JsonKey(name: 'book_id') int bookId});
+      @JsonKey(name: 'book_id') int bookId,
+      @JsonKey(name: 'dayratio') String dayratio});
 }
 
 /// @nodoc
@@ -162,6 +171,7 @@ class __$$_GoalCopyWithImpl<$Res> extends _$GoalCopyWithImpl<$Res, _$_Goal>
     Object? last = null,
     Object? userId = null,
     Object? bookId = null,
+    Object? dayratio = null,
   }) {
     return _then(_$_Goal(
       id: freezed == id
@@ -200,6 +210,10 @@ class __$$_GoalCopyWithImpl<$Res> extends _$GoalCopyWithImpl<$Res, _$_Goal>
           ? _value.bookId
           : bookId // ignore: cast_nullable_to_non_nullable
               as int,
+      dayratio: null == dayratio
+          ? _value.dayratio
+          : dayratio // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -227,7 +241,9 @@ class _$_Goal implements _Goal {
       @JsonKey(name: 'user_id')
           required this.userId,
       @JsonKey(name: 'book_id')
-          required this.bookId});
+          required this.bookId,
+      @JsonKey(name: 'dayratio')
+          required this.dayratio});
 
   factory _$_Goal.fromJson(Map<String, dynamic> json) => _$$_GoalFromJson(json);
 
@@ -259,10 +275,13 @@ class _$_Goal implements _Goal {
   @override
   @JsonKey(name: 'book_id')
   final int bookId;
+  @override
+  @JsonKey(name: 'dayratio')
+  final String dayratio;
 
   @override
   String toString() {
-    return 'Goal(id: $id, startedAt: $startedAt, day: $day, reflected: $reflected, percentage: $percentage, start: $start, last: $last, userId: $userId, bookId: $bookId)';
+    return 'Goal(id: $id, startedAt: $startedAt, day: $day, reflected: $reflected, percentage: $percentage, start: $start, last: $last, userId: $userId, bookId: $bookId, dayratio: $dayratio)';
   }
 
   @override
@@ -281,13 +300,15 @@ class _$_Goal implements _Goal {
             (identical(other.start, start) || other.start == start) &&
             (identical(other.last, last) || other.last == last) &&
             (identical(other.userId, userId) || other.userId == userId) &&
-            (identical(other.bookId, bookId) || other.bookId == bookId));
+            (identical(other.bookId, bookId) || other.bookId == bookId) &&
+            (identical(other.dayratio, dayratio) ||
+                other.dayratio == dayratio));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, id, startedAt, day, reflected,
-      percentage, start, last, userId, bookId);
+      percentage, start, last, userId, bookId, dayratio);
 
   @JsonKey(ignore: true)
   @override
@@ -323,7 +344,9 @@ abstract class _Goal implements Goal {
       @JsonKey(name: 'user_id')
           required final String userId,
       @JsonKey(name: 'book_id')
-          required final int bookId}) = _$_Goal;
+          required final int bookId,
+      @JsonKey(name: 'dayratio')
+          required final String dayratio}) = _$_Goal;
 
   factory _Goal.fromJson(Map<String, dynamic> json) = _$_Goal.fromJson;
 
@@ -355,6 +378,9 @@ abstract class _Goal implements Goal {
   @override
   @JsonKey(name: 'book_id')
   int get bookId;
+  @override
+  @JsonKey(name: 'dayratio')
+  String get dayratio;
   @override
   @JsonKey(ignore: true)
   _$$_GoalCopyWith<_$_Goal> get copyWith => throw _privateConstructorUsedError;
