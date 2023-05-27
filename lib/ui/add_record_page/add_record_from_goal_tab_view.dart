@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:leadstudy/component/constants.dart';
 import 'package:leadstudy/stream/provider.dart';
 import 'package:leadstudy/view_model/add_record_from_goal_view_model.dart';
 import 'package:leadstudy/view_model/record_view_model.dart';
@@ -13,7 +14,10 @@ import 'add_record_page.dart';
 Widget addRecordFromGoalTabView(
     BuildContext context, WidgetRef ref, Book book, Goal? goal) {
   final goalCells = ref.watch(goalCellsProvider);
-  final durationControllerProvider = ref.watch(durationControllerStateProvider);
+  final durationHoursControllerProvider =
+      ref.watch(durationHoursControllerStateProvider);
+  final durationSecondsControllerProvider =
+      ref.watch(durationSecondsControllerStateProvider);
   if (goal == null) {
     return const Center(child: Text("目標の選択は準備中です。"));
   }
@@ -25,17 +29,50 @@ Widget addRecordFromGoalTabView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            TextFormField(
-              controller: durationControllerProvider,
-              inputFormatters: [
-                LengthLimitingTextInputFormatter(5),
-                FilteringTextInputFormatter.digitsOnly,
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Flexible(
+                  child: TextField(
+                    controller: durationHoursControllerProvider,
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(5),
+                      FilteringTextInputFormatter.digitsOnly,
+                    ],
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text(
+                    "時間",
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ),
+                Flexible(
+                  child: TextField(
+                    controller: durationSecondsControllerProvider,
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(5),
+                      FilteringTextInputFormatter.digitsOnly,
+                    ],
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text(
+                    "分",
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ),
               ],
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                labelText: "時間(分)",
-                border: OutlineInputBorder(),
-              ),
             ),
             const SizedBox(
               height: 20,
@@ -114,10 +151,22 @@ Widget addRecordFromGoalTabView(
               children: [
                 FilledButton.icon(
                   onPressed: () {
+                    final minutes = int.parse(
+                                durationHoursControllerProvider.text.isEmpty
+                                    ? "0"
+                                    : durationHoursControllerProvider.text) *
+                            60 +
+                        int.parse(durationSecondsControllerProvider.text.isEmpty
+                            ? "0"
+                            : durationSecondsControllerProvider.text);
+                    if (minutes == 0) {
+                      return context.showErrorSnackBar(
+                          message: "0分記録は現在使用できません。");
+                    }
                     final records =
                         ref.read(goalCellsProvider.notifier).getCheckedRecords(
                               book,
-                              int.parse(durationControllerProvider.text),
+                              minutes,
                             );
                     ref.read(recordListProvider.notifier).addItems(records);
                     Navigator.of(context).pop();

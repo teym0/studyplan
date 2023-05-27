@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:leadstudy/component/constants.dart';
 import 'package:leadstudy/model/book_model.dart';
 import 'package:leadstudy/ui/add_record_page/add_record_page.dart';
 import 'package:leadstudy/view_model/record_view_model.dart';
@@ -27,7 +28,10 @@ Future<TimeOfDay?> _selectTime(
 Widget addRecordTabView(BuildContext context, WidgetRef ref, Book book) {
   final startControllerProvider = ref.watch(startControllerStateProvider);
   final lastControllerProvider = ref.watch(lastControllerStateProvider);
-  final durationControllerProvider = ref.watch(durationControllerStateProvider);
+  final durationHoursControllerProvider =
+      ref.watch(durationHoursControllerStateProvider);
+  final durationSecondsControllerProvider =
+      ref.watch(durationSecondsControllerStateProvider);
   final datetimeControllerProvider = ref.watch(datetimeStateProvider);
 
   return GestureDetector(
@@ -103,17 +107,50 @@ Widget addRecordTabView(BuildContext context, WidgetRef ref, Book book) {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      TextField(
-                        controller: durationControllerProvider,
-                        inputFormatters: [
-                          LengthLimitingTextInputFormatter(5),
-                          FilteringTextInputFormatter.digitsOnly,
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Flexible(
+                            child: TextField(
+                              controller: durationHoursControllerProvider,
+                              inputFormatters: [
+                                LengthLimitingTextInputFormatter(5),
+                                FilteringTextInputFormatter.digitsOnly,
+                              ],
+                              keyboardType: TextInputType.number,
+                              decoration: const InputDecoration(
+                                border: OutlineInputBorder(),
+                              ),
+                            ),
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Text(
+                              "時間",
+                              style: TextStyle(fontSize: 20),
+                            ),
+                          ),
+                          Flexible(
+                            child: TextField(
+                              controller: durationSecondsControllerProvider,
+                              inputFormatters: [
+                                LengthLimitingTextInputFormatter(5),
+                                FilteringTextInputFormatter.digitsOnly,
+                              ],
+                              keyboardType: TextInputType.number,
+                              decoration: const InputDecoration(
+                                border: OutlineInputBorder(),
+                              ),
+                            ),
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Text(
+                              "分",
+                              style: TextStyle(fontSize: 20),
+                            ),
+                          ),
                         ],
-                        keyboardType: TextInputType.number,
-                        decoration: const InputDecoration(
-                          labelText: "時間(分)",
-                          border: OutlineInputBorder(),
-                        ),
                       ),
                       const SizedBox(height: 20),
                       const Text("開始時刻"),
@@ -177,11 +214,24 @@ Widget addRecordTabView(BuildContext context, WidgetRef ref, Book book) {
               children: [
                 FilledButton.icon(
                   onPressed: () {
+                    final minutes = int.parse(
+                                durationHoursControllerProvider.text.isEmpty
+                                    ? "0"
+                                    : durationHoursControllerProvider.text) *
+                            60 +
+                        int.parse(durationSecondsControllerProvider.text.isEmpty
+                            ? "0"
+                            : durationSecondsControllerProvider.text);
+                    if (minutes == 0) {
+                      return context.showErrorSnackBar(
+                          message: "0分記録は現在使用できません。");
+                    }
+
                     final startedAt = ref.read(datetimeStateProvider);
                     ref.read(recordListProvider.notifier).addRecord(
                           startControllerProvider.text,
                           lastControllerProvider.text,
-                          durationControllerProvider.text,
+                          minutes,
                           book,
                           startedAt,
                         );

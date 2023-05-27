@@ -36,8 +36,10 @@ class StopwatchViewModel extends StateNotifier<StopwatchModel> {
       pastTime = DateTime.now().difference(state.started!);
     }
     final minutes = (state.historySeconds / 60).floor() + pastTime.inMinutes;
-    ref.read(durationControllerStateProvider.notifier).state.text =
-        minutes.toString();
+    ref.read(durationHoursControllerStateProvider.notifier).state.text =
+        (minutes / 60).floor().toString();
+    ref.read(durationSecondsControllerStateProvider.notifier).state.text =
+        (minutes % 60).toString();
     state = StopwatchModel(
         working: false,
         time: state.time,
