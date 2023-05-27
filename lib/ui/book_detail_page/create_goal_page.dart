@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:leadstudy/component/constants.dart';
 import 'package:leadstudy/stream/provider.dart';
 
 import '../../model/book_model.dart';
@@ -200,15 +201,18 @@ class _CreateGoalPageState extends ConsumerState<CreateGoalPage> {
                   children: [
                     FilledButton.icon(
                       onPressed: () {
+                        final goalRatioBoard = ref.read(goalRatioBoardProvider);
+                        if (goalRatioBoard.every((element) => element == 0)) {
+                          context.showErrorSnackBar(
+                              message: "最低1日は比率を1以上に指定してください。");
+                          return;
+                        }
                         ref.read(goalsServiceProvider).addItem(
                               widget.args.book,
                               startController.text,
                               lastController.text,
                               periodDaysController.text,
-                              ref
-                                  .read(goalRatioBoardProvider)
-                                  .join()
-                                  .toString(),
+                              goalRatioBoard.join().toString(),
                             );
                         Navigator.of(context).pop();
                       },
