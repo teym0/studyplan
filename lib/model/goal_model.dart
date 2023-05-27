@@ -20,7 +20,7 @@ class Goal with _$Goal {
     @JsonKey(name: 'last') required int last,
     @JsonKey(name: 'user_id') required String userId,
     @JsonKey(name: 'book_id') required int bookId,
-    @JsonKey(name: 'dayratio') required int dayratio,
+    @JsonKey(name: 'dayratio') required String dayratio,
   }) = _Goal;
 
   factory Goal.fromJson(Map<String, dynamic> json) => _$GoalFromJson(json);
