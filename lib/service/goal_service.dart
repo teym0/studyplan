@@ -21,6 +21,7 @@ class GoalsService {
       reflected: false,
       userId: supabase.auth.currentUser!.id,
       bookId: book.id!,
+      dayratio: 1111111,
     );
     await goalRepository.createItem(goal);
   }

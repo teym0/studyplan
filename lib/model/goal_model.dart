@@ -12,7 +12,7 @@ class Goal with _$Goal {
     @JsonKey(name: 'id') int? id,
     @DatetimeJsonConverter()
     @JsonKey(name: 'started_at')
-        required DateTime startedAt,
+    required DateTime startedAt,
     @JsonKey(name: 'day') required int day,
     @JsonKey(name: 'reflected') required bool reflected,
     @JsonKey(name: 'percentage') int? percentage,
@@ -20,6 +20,7 @@ class Goal with _$Goal {
     @JsonKey(name: 'last') required int last,
     @JsonKey(name: 'user_id') required String userId,
     @JsonKey(name: 'book_id') required int bookId,
+    @JsonKey(name: 'dayratio') required int dayratio,
   }) = _Goal;
 
   factory Goal.fromJson(Map<String, dynamic> json) => _$GoalFromJson(json);

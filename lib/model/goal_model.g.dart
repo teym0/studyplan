@@ -17,6 +17,7 @@ _$_Goal _$$_GoalFromJson(Map<String, dynamic> json) => _$_Goal(
       last: json['last'] as int,
       userId: json['user_id'] as String,
       bookId: json['book_id'] as int,
+      dayratio: json['dayratio'] as int,
     );
 
 Map<String, dynamic> _$$_GoalToJson(_$_Goal instance) {
@@ -37,5 +38,6 @@ Map<String, dynamic> _$$_GoalToJson(_$_Goal instance) {
   val['last'] = instance.last;
   val['user_id'] = instance.userId;
   val['book_id'] = instance.bookId;
+  val['dayratio'] = instance.dayratio;
   return val;
 }
