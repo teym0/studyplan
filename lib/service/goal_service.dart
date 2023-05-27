@@ -101,11 +101,26 @@ class GoalsService {
     }
     // 残りの日数からの推奨ページを計算
     int remainingPages = pages.length;
-    int totalRatioUnitCount = getTotalRatioUnitCount(goal.startedAt,
+    int totalRatioUnitCount = getTotalRatioUnitCount(DateTime.now(),
         goal.startedAt.add(Duration(days: goal.day - 1)), goal.dayratio);
-    int reccomendPages = ((remainingPages / totalRatioUnitCount) *
-            _extractDayRatioString(goal.dayratio)[DateTime.now().weekday]!)
-        .round();
+    late int reccomendPages;
+    if (totalRatioUnitCount == 0) {
+      // 残りの日数すべて比率が0の場合、残りページ/残り日数に設定
+      int remainingPages = pages.length;
+      final int remainingDays = goal.startedAt
+          .add(Duration(days: goal.day))
+          .difference(DateTime.now())
+          .inDays;
+      if (remainingDays > 0) {
+        reccomendPages = (remainingPages / (remainingDays + 1)).round();
+      } else {
+        reccomendPages = 0;
+      }
+    } else {
+      reccomendPages = ((remainingPages / totalRatioUnitCount) *
+              _extractDayRatioString(goal.dayratio)[DateTime.now().weekday]!)
+          .round();
+    }
     // 今日に推奨ページ数以上やっていたらタスク完了と表示
     final List todayRecords = await recordRepository.selectTodayItem(
         supabase.auth.currentUser!.id, goal.bookId, DateTime.now());
