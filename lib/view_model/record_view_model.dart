@@ -53,12 +53,12 @@ class RecordListViewModel extends StateNotifier<AsyncValue<List<Record>>> {
     _sortItems();
   }
 
-  Future addRecord(String start, String last, String duration, Book book,
+  Future addRecord(String start, String last, int duration, Book book,
       DateTime startedAt) async {
     final record = Record(
       start: int.parse(start),
       last: int.parse(last),
-      duration: int.parse(duration),
+      duration: duration,
       userId: supabase.auth.currentUser!.id,
       bookId: book.id!,
       startedAt: startedAt,
