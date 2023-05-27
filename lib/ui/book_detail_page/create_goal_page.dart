@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:leadstudy/component/constants.dart';
 import 'package:leadstudy/stream/provider.dart';
 
@@ -9,6 +10,27 @@ import '../../model/book_model.dart';
 final goalRatioBoardProvider = StateProvider<List<int>>((ref) {
   return [1, 1, 1, 1, 1, 1, 1];
 });
+
+final endDateProvider = StateProvider<DateTime>(
+    (ref) => DateTime.now().add(const Duration(days: 7)));
+
+Future<DateTime?> _selectDate(
+    BuildContext context, DateTime initialDate) async {
+  final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: initialDate,
+      firstDate: DateTime(2000),
+      lastDate: DateTime.now().add(const Duration(days: 360)));
+  return picked;
+}
+
+Future<TimeOfDay?> _selectTime(
+    BuildContext context, DateTime initialDate) async {
+  final initialTime = TimeOfDay.fromDateTime(initialDate);
+  final TimeOfDay? picked =
+      await showTimePicker(context: context, initialTime: initialTime);
+  return picked;
+}
 
 class CreateGoalArgument {
   Book book;
@@ -26,7 +48,6 @@ class CreateGoalPage extends ConsumerStatefulWidget {
 class _CreateGoalPageState extends ConsumerState<CreateGoalPage> {
   final startController = TextEditingController();
   final lastController = TextEditingController();
-  final periodDaysController = TextEditingController();
 
   Widget goalRatioBoardCell(
       int weeknumber, int number, List<int> goalRatioBoardData) {
@@ -98,6 +119,8 @@ class _CreateGoalPageState extends ConsumerState<CreateGoalPage> {
 
   @override
   Widget build(BuildContext context) {
+    final endDate = ref.watch(endDateProvider);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("目標を立てる"),
@@ -175,17 +198,27 @@ class _CreateGoalPageState extends ConsumerState<CreateGoalPage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          TextField(
-                            controller: periodDaysController,
-                            inputFormatters: [
-                              LengthLimitingTextInputFormatter(5),
-                              FilteringTextInputFormatter.digitsOnly,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                DateFormat('yyyy年MM月dd日').format(endDate),
+                                style: const TextStyle(fontSize: 20),
+                              ),
+                              IconButton(
+                                  onPressed: () async {
+                                    final DateTime? picked =
+                                        await _selectDate(context, endDate);
+                                    if (picked != null) {
+                                      ref.read(endDateProvider.notifier).state =
+                                          endDate.copyWith(
+                                              year: picked.year,
+                                              month: picked.month,
+                                              day: picked.day);
+                                    }
+                                  },
+                                  icon: const Icon(Icons.calendar_month)),
                             ],
-                            keyboardType: TextInputType.number,
-                            decoration: const InputDecoration(
-                              labelText: "期間(日)",
-                              border: OutlineInputBorder(),
-                            ),
                           ),
                           const SizedBox(height: 20),
                         ],
@@ -211,7 +244,7 @@ class _CreateGoalPageState extends ConsumerState<CreateGoalPage> {
                               widget.args.book,
                               startController.text,
                               lastController.text,
-                              periodDaysController.text,
+                              endDate,
                               goalRatioBoard.join().toString(),
                             );
                         Navigator.of(context).pop();

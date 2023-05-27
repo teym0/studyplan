@@ -11,13 +11,17 @@ class GoalsService {
   final goalRepository = GoalRepository();
   final recordRepository = RecordRepository();
 
-  Future<void> addItem(Book book, String start, String last, String periodDays,
+  Future<void> addItem(Book book, String start, String last, DateTime endDate,
       String dayratio) async {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    endDate = DateTime(endDate.year, endDate.month, endDate.day);
+    print(endDate.difference(today).inDays);
     final goal = Goal(
       startedAt: DateTime.now(),
       start: int.parse(start),
       last: int.parse(last),
-      day: int.parse(periodDays),
+      day: endDate.difference(today).inDays + 1,
       reflected: false,
       userId: supabase.auth.currentUser!.id,
       bookId: book.id!,
@@ -108,9 +112,10 @@ class GoalsService {
       // 残りの日数すべて比率が0の場合、残りページ/残り日数に設定
       int remainingPages = pages.length;
       final int remainingDays = goal.startedAt
-          .add(Duration(days: goal.day))
-          .difference(DateTime.now())
-          .inDays;
+              .add(Duration(days: goal.day))
+              .difference(DateTime.now())
+              .inDays +
+          1;
       if (remainingDays > 0) {
         reccomendPages = (remainingPages / (remainingDays + 1)).round();
       } else {
