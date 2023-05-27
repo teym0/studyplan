@@ -5,6 +5,10 @@ import 'package:leadstudy/stream/provider.dart';
 
 import '../../model/book_model.dart';
 
+final goalRatioBoardProvider = StateProvider<List<int>>((ref) {
+  return [1, 1, 1, 1, 1, 1, 1];
+});
+
 class CreateGoalArgument {
   Book book;
   CreateGoalArgument(this.book);
@@ -22,6 +26,74 @@ class _CreateGoalPageState extends ConsumerState<CreateGoalPage> {
   final startController = TextEditingController();
   final lastController = TextEditingController();
   final periodDaysController = TextEditingController();
+
+  Widget goalRatioBoardCell(
+      int weeknumber, int number, List<int> goalRatioBoardData) {
+    final checked = number <= goalRatioBoardData[weeknumber];
+    return GestureDetector(
+      onTap: () {
+        if (number == goalRatioBoardData[weeknumber]) {
+          goalRatioBoardData[weeknumber] = 0;
+        } else {
+          goalRatioBoardData[weeknumber] = number;
+        }
+        ref.read(goalRatioBoardProvider.notifier).state = [
+          ...goalRatioBoardData
+        ];
+      },
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 4.0),
+        child: Container(
+          width: 30,
+          height: 30,
+          decoration: BoxDecoration(
+            color: (checked)
+                ? Theme.of(context).colorScheme.primary.withOpacity(0.8)
+                : Theme.of(context).colorScheme.primary.withOpacity(0.2),
+            borderRadius: BorderRadius.circular(5.0),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget goalRatioBoardLine(
+      int weeknumber, String dayoftheweek, List<int> goalRatioBoardData) {
+    return Column(
+      children: [
+        goalRatioBoardCell(weeknumber, 8, goalRatioBoardData),
+        goalRatioBoardCell(weeknumber, 7, goalRatioBoardData),
+        goalRatioBoardCell(weeknumber, 6, goalRatioBoardData),
+        goalRatioBoardCell(weeknumber, 5, goalRatioBoardData),
+        goalRatioBoardCell(weeknumber, 4, goalRatioBoardData),
+        goalRatioBoardCell(weeknumber, 3, goalRatioBoardData),
+        goalRatioBoardCell(weeknumber, 2, goalRatioBoardData),
+        goalRatioBoardCell(weeknumber, 1, goalRatioBoardData),
+        Text(dayoftheweek),
+      ],
+    );
+  }
+
+  Widget goalRatioBoard() {
+    final goalRatioBoardData = ref.watch(goalRatioBoardProvider);
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            goalRatioBoardLine(0, "Mon", goalRatioBoardData),
+            goalRatioBoardLine(1, "Tue", goalRatioBoardData),
+            goalRatioBoardLine(2, "Wed", goalRatioBoardData),
+            goalRatioBoardLine(3, "Thu", goalRatioBoardData),
+            goalRatioBoardLine(4, "Fri", goalRatioBoardData),
+            goalRatioBoardLine(5, "Sat", goalRatioBoardData),
+            goalRatioBoardLine(6, "Sun", goalRatioBoardData),
+          ],
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -115,12 +187,13 @@ class _CreateGoalPageState extends ConsumerState<CreateGoalPage> {
                             ),
                           ),
                           const SizedBox(height: 20),
-                          const Text("開始時刻"),
                         ],
                       ),
                     ),
                   ],
                 ),
+                const SizedBox(height: 5),
+                goalRatioBoard(),
                 const SizedBox(height: 18),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
