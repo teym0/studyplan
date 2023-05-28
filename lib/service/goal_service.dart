@@ -81,6 +81,18 @@ class GoalsService {
     return totalRatioUnitCount;
   }
 
+  int getOriginalRemainingDays(
+      DateTime startDate, DateTime endDate, List<int> dayratio) {
+    int days = 0;
+    final Map<int, int> weekDayCounts = _getWeekdayCounts(startDate, endDate);
+    weekDayCounts.forEach((weekday, count) {
+      if (dayratio[weekday - 1] != 0) {
+        days += count;
+      }
+    });
+    return days;
+  }
+
   Future<Tuple2<List<int>, double>> getTaskInformationFromGoal(
       Goal goal) async {
     // 範囲をリストに展開

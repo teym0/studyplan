@@ -7,8 +7,37 @@ import 'package:leadstudy/stream/provider.dart';
 
 import '../../model/book_model.dart';
 
-final goalRatioBoardProvider = StateProvider<List<int>>((ref) {
+final goalRatioBoardProvider = StateProvider.autoDispose<List<int>>((ref) {
   return [1, 1, 1, 1, 1, 1, 1];
+});
+
+final rangeProvider = StateProvider.autoDispose<int>((ref) => 0);
+
+final weekdayCountProvider = StateProvider.autoDispose<int>((ref) {
+  final endDate = ref.watch(endDateProvider);
+  final goalService = ref.watch(goalsServiceProvider);
+  final goalRatioBoardData = ref.watch(goalRatioBoardProvider);
+  final weekdaycount = goalService.getOriginalRemainingDays(
+      DateTime.now(), endDate, goalRatioBoardData);
+  return weekdaycount;
+});
+
+final totalRatioCellCountProvider = StateProvider.autoDispose((ref) {
+  final endDate = ref.watch(endDateProvider);
+  final goalService = ref.watch(goalsServiceProvider);
+  final goalRatioBoardData = ref.watch(goalRatioBoardProvider);
+  final total = goalService.getTotalRatioUnitCount(
+      DateTime.now(), endDate, goalRatioBoardData.join());
+  return total;
+});
+
+final singleCellPagesProvider = StateProvider.autoDispose<int>((ref) {
+  final range = ref.watch(rangeProvider);
+  final weekdaycount = ref.watch(totalRatioCellCountProvider);
+  if (weekdaycount == 0) {
+    return range;
+  }
+  return (range / weekdaycount).floor();
 });
 
 final endDateProvider = StateProvider<DateTime>(
@@ -117,9 +146,20 @@ class _CreateGoalPageState extends ConsumerState<CreateGoalPage> {
     );
   }
 
+  void updateRange() {
+    final start =
+        int.parse(startController.text.isEmpty ? "0" : startController.text);
+    final end =
+        int.parse(lastController.text.isEmpty ? "0" : lastController.text);
+    final pages = end - start + 1;
+    ref.read(rangeProvider.notifier).state = pages;
+  }
+
   @override
   Widget build(BuildContext context) {
     final endDate = ref.watch(endDateProvider);
+    final singleCellPages = ref.watch(singleCellPagesProvider);
+    final weekdaycount = ref.watch(weekdayCountProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -149,6 +189,9 @@ class _CreateGoalPageState extends ConsumerState<CreateGoalPage> {
                           Flexible(
                             child: TextField(
                               controller: startController,
+                              onChanged: (_) {
+                                updateRange();
+                              },
                               inputFormatters: [
                                 LengthLimitingTextInputFormatter(5),
                                 FilteringTextInputFormatter.digitsOnly,
@@ -170,6 +213,9 @@ class _CreateGoalPageState extends ConsumerState<CreateGoalPage> {
                           Flexible(
                             child: TextField(
                               controller: lastController,
+                              onChanged: (_) {
+                                updateRange();
+                              },
                               inputFormatters: [
                                 LengthLimitingTextInputFormatter(5),
                                 FilteringTextInputFormatter.digitsOnly,
@@ -219,6 +265,14 @@ class _CreateGoalPageState extends ConsumerState<CreateGoalPage> {
                                   },
                                   icon: const Icon(Icons.calendar_month)),
                             ],
+                          ),
+                          Text(
+                            "実質日数: $weekdaycount日",
+                            style: const TextStyle(fontSize: 20),
+                          ),
+                          Text(
+                            "1マスあたり: $singleCellPages${widget.args.book.unitName}",
+                            style: const TextStyle(fontSize: 20),
                           ),
                           const SizedBox(height: 20),
                         ],
