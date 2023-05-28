@@ -17,9 +17,10 @@ Widget detailTabView(BuildContext context, Book book, List<Goal> goals) {
       WidgetRef ref, Goal goal, Tuple2<List<int>, double> taskInformation) {
     ref.read(goalsServiceProvider).getTaskInformationFromGoal(goal);
     final int remaining = goal.startedAt
-        .add(Duration(days: goal.day))
-        .difference(DateTime.now())
-        .inDays;
+            .add(Duration(days: goal.day))
+            .difference(DateTime.now())
+            .inDays +
+        1;
     final int amount = goal.last - goal.start + 1;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
