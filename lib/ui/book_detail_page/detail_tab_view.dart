@@ -191,7 +191,7 @@ Widget detailTabView(BuildContext context, Book book, List<Goal> goals) {
                       animationDuration: 400,
                       percent: taskInformation.item2,
                       progressColor: Theme.of(context).colorScheme.primary,
-                      backgroundColor: Colors.grey.shade200,
+                      backgroundColor: Colors.grey.withOpacity(0.4),
                     ),
                   ),
                 ],

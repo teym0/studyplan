@@ -45,18 +45,6 @@ flutter:
   assets:
     - .env
   
-  fonts:
-  - family: LINESeedJP
-    fonts:
-      - asset: assets/fonts/LINESeedJP_A_OTF_Th.otf
-        weight: 100
-      - asset: assets/fonts/LINESeedJP_A_OTF_Rg.otf
-        weight: 400
-      - asset: assets/fonts/LINESeedJP_A_OTF_Bd.otf
-        weight: 700
-      - asset: assets/fonts/LINESeedJP_A_OTF_Eb.otf
-        weight: 800
-
 flutter_icons:
    android: false
    ios: true
