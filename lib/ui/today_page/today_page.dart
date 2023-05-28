@@ -1,8 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:leadstudy/stream/provider.dart';
 
 class TodayPage extends ConsumerWidget {
   const TodayPage({super.key});
+
+  String minutesToHoursMinutes(int minutes) {
+    int hours = minutes ~/ 60;
+    int remainingMinutes = minutes % 60;
+
+    String hoursString = hours.toString();
+    String minutesString = remainingMinutes.toString().padLeft(2, '0');
+
+    return '$hoursString時間$minutesString分';
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -120,10 +131,23 @@ class TodayPage extends ConsumerWidget {
                                   Icons.timer_outlined,
                                   size: 18,
                                 ),
-                                Text("1時間52分",
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.grey.shade600)),
+                                FutureBuilder(
+                                  future: ref
+                                      .read(recordServiceProvider)
+                                      .getTodayHour(),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.hasData) {
+                                      return Text(
+                                        minutesToHoursMinutes(snapshot.data!),
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            color: Colors.grey.shade600),
+                                      );
+                                    } else {
+                                      return Container();
+                                    }
+                                  },
+                                ),
                               ],
                             ),
                           ],

@@ -1,6 +1,7 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:leadstudy/service/book_service.dart';
 import 'package:leadstudy/service/goal_service.dart';
+import 'package:leadstudy/service/record_service.dart';
 
 import '../component/constants.dart';
 import '../model/book_model.dart';
@@ -18,3 +19,4 @@ final goalsProvider = StreamProvider<List<Goal>>(
 
 final booksServiceProvider = Provider((ref) => BooksService());
 final goalsServiceProvider = Provider((ref) => GoalsService());
+final recordServiceProvider = Provider((ref) => RecordService());
