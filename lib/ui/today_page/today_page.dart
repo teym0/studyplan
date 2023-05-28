@@ -26,7 +26,6 @@ class TodayPage extends ConsumerWidget {
             Container(
               width: double.infinity,
               decoration: const BoxDecoration(
-                color: Colors.white,
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(30),
                     bottomLeft: Radius.circular(30),
