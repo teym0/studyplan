@@ -128,6 +128,13 @@ class _CreateGoalPageState extends ConsumerState<CreateGoalPage> {
   Widget goalRatioBoard() {
     final goalRatioBoardData = ref.watch(goalRatioBoardProvider);
     return Card(
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        side: BorderSide(
+          color: Theme.of(context).colorScheme.outline,
+        ),
+        borderRadius: const BorderRadius.all(Radius.circular(12)),
+      ),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
         child: Row(
