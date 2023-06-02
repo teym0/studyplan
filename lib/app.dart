@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:leadstudy/stream/provider.dart';
 import 'package:leadstudy/ui/add_record_page/add_record_page.dart';
 import 'package:leadstudy/ui/book_detail_page/book_detail_page.dart';
 import 'package:leadstudy/ui/book_detail_page/create_goal_page.dart';
@@ -10,7 +11,6 @@ import 'package:leadstudy/ui/home_page.dart';
 import 'package:leadstudy/ui/login_page.dart';
 import 'package:leadstudy/ui/register_page.dart';
 import 'package:leadstudy/ui/splash_page.dart';
-import 'package:leadstudy/view_model/record_view_model.dart';
 
 class MyApp extends HookConsumerWidget {
   const MyApp({super.key});
@@ -61,7 +61,7 @@ class MyApp extends HookConsumerWidget {
                 fullscreenDialog: true);
           case "/book_detail":
             final args = settings.arguments as BookScreenArgument;
-            ref.read(recordListProvider.notifier).getRecentActivity(args.book);
+            ref.read(selectedBookProvider.notifier).state = args.book;
             return MaterialPageRoute(
               fullscreenDialog: true,
               builder: (context) => BookDetailPage(args),

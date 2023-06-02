@@ -5,7 +5,6 @@ import 'package:leadstudy/stream/provider.dart';
 import 'package:leadstudy/ui/add_record_page/add_record_page.dart';
 import 'package:leadstudy/ui/book_detail_page/detail_tab_view.dart';
 import 'package:leadstudy/ui/book_detail_page/history_tab_view.dart';
-import 'package:leadstudy/view_model/record_view_model.dart';
 
 import '../../view_model/section_view_model.dart';
 import 'heat_map_tab_view.dart';
@@ -21,7 +20,7 @@ class BookDetailPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final records = ref.watch(recordListProvider);
+    final records = ref.watch(recordsProvider);
     final sections = ref.watch(sectionListProvider);
     final goals = ref.watch(goalsProvider.select((goals) => (goals.value ?? [])
         .where((goal) => (goal.bookId == argument.book.id) && !goal.reflected)

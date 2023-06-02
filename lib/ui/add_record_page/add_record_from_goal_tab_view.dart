@@ -5,7 +5,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:leadstudy/component/constants.dart';
 import 'package:leadstudy/stream/provider.dart';
 import 'package:leadstudy/view_model/add_record_from_goal_view_model.dart';
-import 'package:leadstudy/view_model/record_view_model.dart';
 
 import '../../model/book_model.dart';
 import '../../model/goal_model.dart';
@@ -168,7 +167,7 @@ Widget addRecordFromGoalTabView(
                               book,
                               minutes,
                             );
-                    ref.read(recordListProvider.notifier).addItems(records);
+                    ref.read(recordServiceProvider).addItems(records);
                     Navigator.of(context).pop();
                   },
                   label: const Text("記録する"),

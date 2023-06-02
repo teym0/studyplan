@@ -3,7 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:leadstudy/model/book_model.dart';
 import 'package:leadstudy/model/record_model.dart';
-import 'package:leadstudy/view_model/record_view_model.dart';
+import 'package:leadstudy/stream/provider.dart';
 
 Widget activityLogCard(
     BuildContext context, Book book, Record record, WidgetRef ref) {
@@ -44,7 +44,7 @@ Widget activityLogCard(
           ),
           IconButton(
             onPressed: () {
-              ref.read(recordListProvider.notifier).deleteItem(record);
+              ref.read(recordServiceProvider).deleteItem(record);
             },
             icon: const Icon(
               Icons.delete,
