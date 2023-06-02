@@ -23,24 +23,31 @@ class _LoginPageState extends State<LoginPage> {
       body: ListView(
         padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 20),
         children: [
-          TextFormField(
-            controller: _emailController,
-            decoration: const InputDecoration(
-              labelText: "メールアドレス",
-              border: OutlineInputBorder(),
-            ),
-          ),
-          const SizedBox(
-            height: 18,
-          ),
-          TextFormField(
-            controller: _passwordController,
-            obscureText: true,
-            decoration: const InputDecoration(
-              labelText: "パスワード",
-              border: OutlineInputBorder(),
-            ),
-          ),
+          AutofillGroup(
+              child: Column(
+            children: [
+              TextFormField(
+                controller: _emailController,
+                autofillHints: const [AutofillHints.username],
+                decoration: const InputDecoration(
+                  labelText: "メールアドレス",
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(
+                height: 18,
+              ),
+              TextFormField(
+                controller: _passwordController,
+                obscureText: true,
+                autofillHints: const [AutofillHints.password],
+                decoration: const InputDecoration(
+                  labelText: "パスワード",
+                  border: OutlineInputBorder(),
+                ),
+              ),
+            ],
+          )),
           const SizedBox(
             height: 20,
           ),
