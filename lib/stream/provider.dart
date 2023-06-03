@@ -35,5 +35,5 @@ final recordsProvider = StreamProvider<List<Record>>((ref) {
 });
 
 final booksServiceProvider = Provider((ref) => BooksService());
-final goalsServiceProvider = Provider((ref) => GoalsService());
+final goalsServiceProvider = Provider((ref) => GoalsService(ref));
 final recordServiceProvider = Provider((ref) => RecordService());

@@ -17,14 +17,6 @@ class RecordService {
     await recordRepository.createItem(record);
   }
 
-  // Future<void> getRecentActivity(Book book) async {
-  //   final match = {
-  //     "book_id": book.id,
-  //     "user_id": supabase.auth.currentUser!.id
-  //   };
-  //   await recordRepository.selectItem(match);
-  // }
-
   Future addRecord(String start, String last, int duration, Book book,
       DateTime startedAt) async {
     final record = Record(
@@ -41,5 +33,28 @@ class RecordService {
 
   Future<void> deleteItem(Record deleterecord) async {
     recordRepository.deleteItem(deleterecord);
+  }
+
+  List selectTodayItem(List<Record> records, int? bookId) {
+    final today = DateTime.now();
+    final start = DateTime(today.year, today.month, today.day, 0, 0, 0).toUtc();
+    final last =
+        DateTime(today.year, today.month, today.day, 23, 59, 59).toUtc();
+    return selectRangeItem(records, bookId, start, last);
+  }
+
+  bool _isDateTimeInRange(
+      DateTime dateTime, DateTime startDateTime, DateTime endDateTime) {
+    return dateTime.isAfter(startDateTime) && dateTime.isBefore(endDateTime);
+  }
+
+  List<Record> selectRangeItem(
+      List<Record> records, int? bookId, DateTime start, DateTime last) {
+    start = DateTime(start.year, start.month, start.day, 0, 0, 0).toUtc();
+    last = DateTime(last.year, last.month, last.day, 23, 59, 59).toUtc();
+    return records.where((Record record) {
+      return (_isDateTimeInRange(record.startedAt, start, last) &&
+          (bookId == null || record.bookId == bookId));
+    }).toList();
   }
 }

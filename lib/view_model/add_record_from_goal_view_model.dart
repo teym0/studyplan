@@ -1,6 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:leadstudy/service/goal_service.dart';
+import 'package:leadstudy/stream/provider.dart';
 
 import '../component/constants.dart';
 import '../infrastructure/record_repository.dart';
@@ -9,20 +9,20 @@ import '../model/goal_model.dart';
 import '../model/record_model.dart';
 
 final goalCellsProvider =
-    StateNotifierProvider<GoalCellsViewModel, AsyncValue<List<GoalCell>>>(
-        (ref) {
-  return GoalCellsViewModel();
+    StateNotifierProvider<GoalCellsViewModel, List<GoalCell>>((ref) {
+  return GoalCellsViewModel(ref);
 });
 
-class GoalCellsViewModel extends StateNotifier<AsyncValue<List<GoalCell>>> {
-  GoalCellsViewModel() : super(const AsyncValue.loading());
+class GoalCellsViewModel extends StateNotifier<List<GoalCell>> {
+  GoalCellsViewModel(this.ref) : super([]);
+
+  final Ref ref;
 
   final recordRepository = RecordRepository();
-  final goalListViewModel = GoalsService();
 
   List<Record> getCheckedRecords(Book book, int duration) {
     List<GoalCell> checked =
-        state.value!.where((goalcell) => goalcell.checked).toList();
+        state.where((goalcell) => goalcell.checked).toList();
     checked.sort((a, b) => a.number.compareTo(b.number));
     // 連番を範囲データに変換
     final singlePageDuration = (duration / (checked.length)).round();
@@ -65,18 +65,17 @@ class GoalCellsViewModel extends StateNotifier<AsyncValue<List<GoalCell>>> {
   }
 
   void uncheckAll() {
-    state = AsyncValue.data(state.value!
+    state = state
         .map((goalCell) => GoalCell(
             number: goalCell.number, done: goalCell.done, checked: false))
-        .toList());
+        .toList();
   }
 
-  Future<void> checkTodayTask(Goal goal) async {
+  void checkTodayTask(Goal goal) {
     final oldState = state;
-    state = const AsyncValue.loading();
     final List<int> tasks =
-        (await goalListViewModel.getTaskInformationFromGoal(goal)).item1;
-    final List<GoalCell> newState = oldState.value!.map((goalCell) {
+        ref.read(goalsServiceProvider).getTaskInformationFromGoal(goal).item1;
+    final List<GoalCell> newState = oldState.map((goalCell) {
       if (tasks.contains(goalCell.number)) {
         return GoalCell(
           number: goalCell.number,
@@ -86,25 +85,24 @@ class GoalCellsViewModel extends StateNotifier<AsyncValue<List<GoalCell>>> {
       }
       return goalCell;
     }).toList();
-    state = AsyncValue.data(newState);
+    state = newState;
   }
 
-  Future<void> getHeatMapData(Goal goal) async {
-    state = const AsyncValue.loading();
+  void getHeatMapData(Goal goal) {
+    final allRecords = ref.read(recordsProvider).value!;
     // 範囲をリストに展開
     List<GoalCell> pages = [];
     for (int i = goal.start; i < (goal.last + 1); i++) {
       pages.add(GoalCell(number: i, done: false, checked: false));
     }
     // 入力された記録の範囲
-    final List records = await recordRepository.selectRangeItem(
-      supabase.auth.currentUser!.id,
-      goal.bookId,
-      goal.startedAt,
-      goal.startedAt.add(Duration(days: goal.day)),
-    );
-    for (var item in records) {
-      final record = Record.fromJson(item);
+    final List records = ref.read(recordServiceProvider).selectRangeItem(
+          allRecords,
+          goal.bookId,
+          goal.startedAt,
+          goal.startedAt.add(Duration(days: goal.day)),
+        );
+    for (var record in records) {
       for (int i = record.start; i < (record.last + 1); i++) {
         final GoalCell? searchResult =
             pages.firstWhereOrNull((item) => item.number == i);
@@ -120,12 +118,12 @@ class GoalCellsViewModel extends StateNotifier<AsyncValue<List<GoalCell>>> {
         pages[tupleIndex] = newCellData;
       }
     }
-    state = AsyncValue.data(pages);
+    state = pages;
     checkTodayTask(goal);
   }
 
   void tapNumber(int number) {
-    final List<GoalCell> newstate = state.value!.map((GoalCell item) {
+    final List<GoalCell> newstate = state.map((GoalCell item) {
       if (item.number == number) {
         return GoalCell(
             number: number, done: item.done, checked: !item.checked);
@@ -133,7 +131,7 @@ class GoalCellsViewModel extends StateNotifier<AsyncValue<List<GoalCell>>> {
         return item;
       }
     }).toList();
-    state = AsyncValue.data(newstate);
+    state = newstate;
   }
 }
 
