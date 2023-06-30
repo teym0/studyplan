@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:leadstudy/stream/provider.dart';
 
 class TodayPage extends ConsumerWidget {
   const TodayPage({super.key});
@@ -120,34 +119,34 @@ class TodayPage extends ConsumerWidget {
                         const SizedBox(
                           width: 15,
                         ),
-                        Column(
+                        const Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text("時間", style: TextStyle(fontSize: 18)),
+                            Text("時間", style: TextStyle(fontSize: 18)),
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                const Icon(
+                                Icon(
                                   Icons.timer_outlined,
                                   size: 18,
                                 ),
-                                FutureBuilder(
-                                  future: ref
-                                      .read(recordServiceProvider)
-                                      .getTodayHour(),
-                                  builder: (context, snapshot) {
-                                    if (snapshot.hasData) {
-                                      return Text(
-                                        minutesToHoursMinutes(snapshot.data!),
-                                        style: TextStyle(
-                                            fontSize: 14,
-                                            color: Colors.grey.shade600),
-                                      );
-                                    } else {
-                                      return Container();
-                                    }
-                                  },
-                                ),
+                                // FutureBuilder(
+                                //   future: ref
+                                //       .read(recordServiceProvider)
+                                //       .getTodayHour(),
+                                //   builder: (context, snapshot) {
+                                //     if (snapshot.hasData) {
+                                //       return Text(
+                                //         minutesToHoursMinutes(snapshot.data!),
+                                //         style: TextStyle(
+                                //             fontSize: 14,
+                                //             color: Colors.grey.shade600),
+                                //       );
+                                //     } else {
+                                //       return Container();
+                                //     }
+                                //   },
+                                // ),
                               ],
                             ),
                           ],

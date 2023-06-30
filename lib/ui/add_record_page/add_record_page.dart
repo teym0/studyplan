@@ -49,11 +49,9 @@ class AddRecordPageState extends ConsumerState<AddRecordPage>
       return;
     }
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Future(() async {
-        await ref
-            .read(goalCellsProvider.notifier)
-            .getHeatMapData(widget.argument.goal!);
-      });
+      ref
+          .read(goalCellsProvider.notifier)
+          .getHeatMapData(widget.argument.goal!);
     });
   }
 

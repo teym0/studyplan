@@ -5,7 +5,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:leadstudy/component/constants.dart';
 import 'package:leadstudy/stream/provider.dart';
 import 'package:leadstudy/view_model/add_record_from_goal_view_model.dart';
-import 'package:leadstudy/view_model/record_view_model.dart';
 
 import '../../model/book_model.dart';
 import '../../model/goal_model.dart';
@@ -99,50 +98,44 @@ Widget addRecordFromGoalTabView(
             const SizedBox(
               height: 20,
             ),
-            goalCells.when(
-              data: (data) {
-                final checkedCount =
-                    data.where((goalCell) => goalCell.checked).length;
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    FutureBuilder(
-                        future: ref
-                            .read(goalsServiceProvider)
-                            .getTaskInformationFromGoal(goal),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            return Text(
-                              "選択中: $checkedCount/${snapshot.data!.item1.length}",
-                              style: const TextStyle(fontSize: 18),
-                            );
-                          }
-                          return Text(
-                            "選択中: $checkedCount/$checkedCount",
-                            style: const TextStyle(fontSize: 18),
-                          );
-                        }),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    GridView.builder(
-                      // scrollDirection: Axis.vertical,
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 10),
-                      itemCount: data.length,
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        return _heatCell(ref, data[index]);
-                      },
-                    ),
-                  ],
-                );
-              },
-              error: (error, stackTrace) => const Text("Error!"),
-              loading: () => const CircularProgressIndicator(),
+            // final checkedCount =
+            //     data.where((goalCell) => goalCell.checked).length;
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // FutureBuilder(
+                //     future: ref
+                //         .read(goalsServiceProvider)
+                //         .getTaskInformationFromGoal(goal),
+                //     builder: (context, snapshot) {
+                //       if (snapshot.hasData) {
+                //         return Text(
+                //           "選択中: $checkedCount/${snapshot.data!.item1.length}",
+                //           style: const TextStyle(fontSize: 18),
+                //         );
+                //       }
+                //       return Text(
+                //         "選択中: $checkedCount/$checkedCount",
+                //         style: const TextStyle(fontSize: 18),
+                //       );
+                //     }),
+                const SizedBox(
+                  height: 20,
+                ),
+                GridView.builder(
+                  // scrollDirection: Axis.vertical,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 10),
+                  itemCount: goalCells.length,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    return _heatCell(ref, goalCells[index]);
+                  },
+                ),
+              ],
             ),
+
             const SizedBox(
               height: 20,
             ),
@@ -168,7 +161,7 @@ Widget addRecordFromGoalTabView(
                               book,
                               minutes,
                             );
-                    ref.read(recordListProvider.notifier).addItems(records);
+                    ref.read(recordServiceProvider).addItems(records);
                     Navigator.of(context).pop();
                   },
                   label: const Text("記録する"),

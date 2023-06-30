@@ -1,3 +1,5 @@
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:leadstudy/stream/provider.dart';
 import 'package:tuple/tuple.dart';
 
 import '../component/constants.dart';
@@ -8,6 +10,10 @@ import '../model/goal_model.dart';
 import '../model/record_model.dart';
 
 class GoalsService {
+  GoalsService(this.ref);
+
+  Ref ref;
+
   final goalRepository = GoalRepository();
   final recordRepository = RecordRepository();
 
@@ -93,8 +99,10 @@ class GoalsService {
     return days;
   }
 
-  Future<Tuple2<List<int>, double>> getTaskInformationFromGoal(
-      Goal goal) async {
+  Tuple2<List<int>, double> getTaskInformationFromGoal(Goal goal) {
+    final recordService = ref.read(recordServiceProvider);
+    List<Record>? allRecords = ref.read(recordsProvider).value;
+    allRecords ??= [];
     // 範囲をリストに展開
     List<int> pages = [];
     for (int i = goal.start; i < (goal.last + 1); i++) {
@@ -102,13 +110,12 @@ class GoalsService {
     }
     final total = pages.length;
     // 前日までに入力された記録の範囲を削除
-    final List records = await recordRepository.selectRangeItem(
-        supabase.auth.currentUser!.id,
+    final List<Record> records = recordService.selectRangeItem(
+        allRecords,
         goal.bookId,
         goal.startedAt,
         DateTime.now().add(const Duration(days: -1)));
-    for (var item in records) {
-      final record = Record.fromJson(item);
+    for (var record in records) {
       for (int i = record.start; i < (record.last + 1); i++) {
         if (pages.contains(i)) {
           pages.remove(i);
@@ -139,11 +146,10 @@ class GoalsService {
           .round();
     }
     // 今日に推奨ページ数以上やっていたらタスク完了と表示
-    final List todayRecords = await recordRepository.selectTodayItem(
-        supabase.auth.currentUser!.id, goal.bookId, DateTime.now());
+    final List todayRecords =
+        recordService.selectTodayItem(allRecords, goal.bookId);
     final List<int> pagesWithDoneToday = [...pages];
-    for (var item in todayRecords) {
-      final record = Record.fromJson(item);
+    for (var record in todayRecords) {
       for (int i = record.start; i < (record.last + 1); i++) {
         if (pagesWithDoneToday.contains(i)) {
           pagesWithDoneToday.remove(i);

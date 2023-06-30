@@ -272,16 +272,10 @@ Widget detailTabView(BuildContext context, Book book, List<Goal> goals) {
               child: ListView.builder(
                 itemCount: goals.length,
                 itemBuilder: (context, index) {
-                  return FutureBuilder(
-                      future: ref
-                          .read(goalsServiceProvider)
-                          .getTaskInformationFromGoal(goals[index]),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          return goalCard(ref, goals[index], snapshot.data!);
-                        }
-                        return const Center(child: CircularProgressIndicator());
-                      });
+                  final data = ref
+                      .read(goalsServiceProvider)
+                      .getTaskInformationFromGoal(goals[index]);
+                  return goalCard(ref, goals[index], data);
                 },
               ),
             );

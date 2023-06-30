@@ -4,8 +4,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:leadstudy/component/constants.dart';
 import 'package:leadstudy/model/book_model.dart';
+import 'package:leadstudy/stream/provider.dart';
 import 'package:leadstudy/ui/add_record_page/add_record_page.dart';
-import 'package:leadstudy/view_model/record_view_model.dart';
 
 Future<DateTime?> _selectDate(
     BuildContext context, DateTime initialDate) async {
@@ -228,7 +228,7 @@ Widget addRecordTabView(BuildContext context, WidgetRef ref, Book book) {
                     }
 
                     final startedAt = ref.read(datetimeStateProvider);
-                    ref.read(recordListProvider.notifier).addRecord(
+                    ref.read(recordServiceProvider).addRecord(
                           startControllerProvider.text,
                           lastControllerProvider.text,
                           minutes,
