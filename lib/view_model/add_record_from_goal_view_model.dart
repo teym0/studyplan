@@ -102,6 +102,7 @@ class GoalCellsViewModel extends StateNotifier<List<GoalCell>> {
           goal.bookId,
           goal.startedAt,
           goal.startedAt.add(Duration(days: goal.day)),
+          goal,
         );
     for (var record in records) {
       for (int i = record.start; i < (record.last + 1); i++) {
