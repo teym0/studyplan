@@ -1,6 +1,7 @@
 import 'package:leadstudy/component/constants.dart';
 import 'package:leadstudy/infrastructure/record_repository.dart';
 import 'package:leadstudy/model/book_model.dart';
+import 'package:leadstudy/model/goal_model.dart';
 
 import '../model/record_model.dart';
 
@@ -18,7 +19,7 @@ class RecordService {
   }
 
   Future addRecord(String start, String last, int duration, Book book,
-      DateTime startedAt) async {
+      DateTime startedAt, Goal? goal) async {
     final record = Record(
       start: int.parse(start),
       last: int.parse(last),
@@ -27,6 +28,7 @@ class RecordService {
       bookId: book.id!,
       startedAt: startedAt,
       recordedAt: DateTime.now(),
+      goalId: goal?.id,
     );
     addItem(record);
   }

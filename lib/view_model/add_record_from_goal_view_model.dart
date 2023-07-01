@@ -20,7 +20,7 @@ class GoalCellsViewModel extends StateNotifier<List<GoalCell>> {
 
   final recordRepository = RecordRepository();
 
-  List<Record> getCheckedRecords(Book book, int duration) {
+  List<Record> getCheckedRecords(Book book, int duration, Goal goal) {
     List<GoalCell> checked =
         state.where((goalcell) => goalcell.checked).toList();
     checked.sort((a, b) => a.number.compareTo(b.number));
@@ -38,6 +38,7 @@ class GoalCellsViewModel extends StateNotifier<List<GoalCell>> {
           startedAt: DateTime.now(),
           bookId: book.id!,
           userId: supabase.auth.currentUser!.id,
+          goalId: goal.id,
         );
       } else {
         if (current.last + 1 == goalcell.number) {

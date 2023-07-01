@@ -160,6 +160,7 @@ Widget addRecordFromGoalTabView(
                         ref.read(goalCellsProvider.notifier).getCheckedRecords(
                               book,
                               minutes,
+                              goal,
                             );
                     ref.read(recordServiceProvider).addItems(records);
                     Navigator.of(context).pop();

@@ -14,12 +14,13 @@ class Record with _$Record {
     @JsonKey(name: 'duration') required int duration,
     @DatetimeJsonConverter()
     @JsonKey(name: 'recorded_at')
-        required DateTime recordedAt,
+    required DateTime recordedAt,
     @DatetimeJsonConverter()
     @JsonKey(name: 'started_at')
-        required DateTime startedAt,
+    required DateTime startedAt,
     @JsonKey(name: 'book_id') required int bookId,
     @JsonKey(name: 'user_id') required String userId,
+    @JsonKey(name: 'goal_id') int? goalId,
   }) = _Record;
 
   factory Record.fromJson(Map<String, dynamic> json) => _$RecordFromJson(json);

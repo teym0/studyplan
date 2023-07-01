@@ -17,6 +17,7 @@ _$_Record _$$_RecordFromJson(Map<String, dynamic> json) => _$_Record(
           const DatetimeJsonConverter().fromJson(json['started_at'] as String),
       bookId: json['book_id'] as int,
       userId: json['user_id'] as String,
+      goalId: json['goal_id'] as int?,
     );
 
 Map<String, dynamic> _$$_RecordToJson(_$_Record instance) {
@@ -37,5 +38,6 @@ Map<String, dynamic> _$$_RecordToJson(_$_Record instance) {
   val['started_at'] = const DatetimeJsonConverter().toJson(instance.startedAt);
   val['book_id'] = instance.bookId;
   val['user_id'] = instance.userId;
+  writeNotNull('goal_id', instance.goalId);
   return val;
 }
