@@ -114,8 +114,9 @@ class GoalsService {
         allRecords,
         goal.bookId,
         goal.startedAt,
-        DateTime.now().add(const Duration(days: -1)));
-    for (var record in records) {
+        DateTime.now().add(const Duration(days: -1)),
+        goal);
+    for (Record record in records) {
       for (int i = record.start; i < (record.last + 1); i++) {
         if (pages.contains(i)) {
           pages.remove(i);
@@ -147,7 +148,7 @@ class GoalsService {
     }
     // 今日に推奨ページ数以上やっていたらタスク完了と表示
     final List todayRecords =
-        recordService.selectTodayItem(allRecords, goal.bookId);
+        recordService.selectTodayItem(allRecords, goal.bookId, goal);
     final List<int> pagesWithDoneToday = [...pages];
     for (var record in todayRecords) {
       for (int i = record.start; i < (record.last + 1); i++) {

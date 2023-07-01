@@ -229,12 +229,12 @@ Widget addRecordTabView(BuildContext context, WidgetRef ref, Book book) {
 
                     final startedAt = ref.read(datetimeStateProvider);
                     ref.read(recordServiceProvider).addRecord(
-                          startControllerProvider.text,
-                          lastControllerProvider.text,
-                          minutes,
-                          book,
-                          startedAt,
-                        );
+                        startControllerProvider.text,
+                        lastControllerProvider.text,
+                        minutes,
+                        book,
+                        startedAt,
+                        null);
                     Navigator.of(context).pop();
                   },
                   label: const Text("記録する"),

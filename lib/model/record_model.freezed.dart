@@ -38,6 +38,8 @@ mixin _$Record {
   int get bookId => throw _privateConstructorUsedError;
   @JsonKey(name: 'user_id')
   String get userId => throw _privateConstructorUsedError;
+  @JsonKey(name: 'goal_id')
+  int? get goalId => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -67,7 +69,9 @@ abstract class $RecordCopyWith<$Res> {
       @JsonKey(name: 'book_id')
           int bookId,
       @JsonKey(name: 'user_id')
-          String userId});
+          String userId,
+      @JsonKey(name: 'goal_id')
+          int? goalId});
 }
 
 /// @nodoc
@@ -91,6 +95,7 @@ class _$RecordCopyWithImpl<$Res, $Val extends Record>
     Object? startedAt = null,
     Object? bookId = null,
     Object? userId = null,
+    Object? goalId = freezed,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
@@ -125,6 +130,10 @@ class _$RecordCopyWithImpl<$Res, $Val extends Record>
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
               as String,
+      goalId: freezed == goalId
+          ? _value.goalId
+          : goalId // ignore: cast_nullable_to_non_nullable
+              as int?,
     ) as $Val);
   }
 }
@@ -153,7 +162,9 @@ abstract class _$$_RecordCopyWith<$Res> implements $RecordCopyWith<$Res> {
       @JsonKey(name: 'book_id')
           int bookId,
       @JsonKey(name: 'user_id')
-          String userId});
+          String userId,
+      @JsonKey(name: 'goal_id')
+          int? goalId});
 }
 
 /// @nodoc
@@ -174,6 +185,7 @@ class __$$_RecordCopyWithImpl<$Res>
     Object? startedAt = null,
     Object? bookId = null,
     Object? userId = null,
+    Object? goalId = freezed,
   }) {
     return _then(_$_Record(
       id: freezed == id
@@ -208,6 +220,10 @@ class __$$_RecordCopyWithImpl<$Res>
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
               as String,
+      goalId: freezed == goalId
+          ? _value.goalId
+          : goalId // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 }
@@ -234,7 +250,9 @@ class _$_Record implements _Record {
       @JsonKey(name: 'book_id')
           required this.bookId,
       @JsonKey(name: 'user_id')
-          required this.userId});
+          required this.userId,
+      @JsonKey(name: 'goal_id')
+          this.goalId});
 
   factory _$_Record.fromJson(Map<String, dynamic> json) =>
       _$$_RecordFromJson(json);
@@ -265,10 +283,13 @@ class _$_Record implements _Record {
   @override
   @JsonKey(name: 'user_id')
   final String userId;
+  @override
+  @JsonKey(name: 'goal_id')
+  final int? goalId;
 
   @override
   String toString() {
-    return 'Record(id: $id, start: $start, last: $last, duration: $duration, recordedAt: $recordedAt, startedAt: $startedAt, bookId: $bookId, userId: $userId)';
+    return 'Record(id: $id, start: $start, last: $last, duration: $duration, recordedAt: $recordedAt, startedAt: $startedAt, bookId: $bookId, userId: $userId, goalId: $goalId)';
   }
 
   @override
@@ -286,13 +307,14 @@ class _$_Record implements _Record {
             (identical(other.startedAt, startedAt) ||
                 other.startedAt == startedAt) &&
             (identical(other.bookId, bookId) || other.bookId == bookId) &&
-            (identical(other.userId, userId) || other.userId == userId));
+            (identical(other.userId, userId) || other.userId == userId) &&
+            (identical(other.goalId, goalId) || other.goalId == goalId));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, id, start, last, duration,
-      recordedAt, startedAt, bookId, userId);
+      recordedAt, startedAt, bookId, userId, goalId);
 
   @JsonKey(ignore: true)
   @override
@@ -327,7 +349,9 @@ abstract class _Record implements Record {
       @JsonKey(name: 'book_id')
           required final int bookId,
       @JsonKey(name: 'user_id')
-          required final String userId}) = _$_Record;
+          required final String userId,
+      @JsonKey(name: 'goal_id')
+          final int? goalId}) = _$_Record;
 
   factory _Record.fromJson(Map<String, dynamic> json) = _$_Record.fromJson;
 
@@ -357,6 +381,9 @@ abstract class _Record implements Record {
   @override
   @JsonKey(name: 'user_id')
   String get userId;
+  @override
+  @JsonKey(name: 'goal_id')
+  int? get goalId;
   @override
   @JsonKey(ignore: true)
   _$$_RecordCopyWith<_$_Record> get copyWith =>
