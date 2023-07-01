@@ -3,7 +3,9 @@ class HeatCellData {
   int level;
   int count;
   DateTime? nextReviewAt;
-  HeatCellData(this.number, this.level, this.count, this.nextReviewAt);
+  bool today;
+  HeatCellData(
+      this.number, this.level, this.count, this.nextReviewAt, this.today);
 }
 
 class HeatCellColor {
