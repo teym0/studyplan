@@ -6,17 +6,29 @@ import 'package:leadstudy/model/record_model.dart';
 import 'package:leadstudy/model/section_model.dart';
 
 import './heatmap.dart';
+import '../../model/goal_model.dart';
+import '../../stream/provider.dart';
 import '../../utils/heatmapprocess.dart';
 
-Widget heatMapTabView(BuildContext context, WidgetRef ref, Book book,
-    AsyncValue<List<Record>> records, AsyncValue<List<Section>> sections) {
+Widget heatMapTabView(
+    BuildContext context,
+    WidgetRef ref,
+    Book book,
+    AsyncValue<List<Record>> records,
+    AsyncValue<List<Section>> sections,
+    List<Goal> goals) {
   return records.when(
     data: ((recordData) {
       return sections.when(
         data: (sectionData) {
-          print(sectionData);
-          final List<HeatCellData> heatMapData =
-              generateHeatMapDataFromRecords(book.amount, recordData);
+          final Set<int> todayPages = <int>{};
+          for (Goal goal in goals) {
+            final data =
+                ref.read(goalsServiceProvider).getTaskInformationFromGoal(goal);
+            todayPages.addAll(data.item1);
+          }
+          final List<HeatCellData> heatMapData = generateHeatMapDataFromRecords(
+              book.amount, recordData, todayPages);
           final List<HeatCellColor> heatMapColorData =
               generateHeatMapColorData(heatMapData);
           if (sectionData.isEmpty) {

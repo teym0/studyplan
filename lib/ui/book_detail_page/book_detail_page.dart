@@ -58,7 +58,8 @@ class BookDetailPage extends HookConsumerWidget {
         ),
         body: TabBarView(
           children: [
-            heatMapTabView(context, ref, argument.book, records, sections),
+            heatMapTabView(
+                context, ref, argument.book, records, sections, goals),
             detailTabView(context, argument.book, goals),
             historyTabView(records, argument.book, ref),
           ],
