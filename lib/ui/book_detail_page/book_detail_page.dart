@@ -23,7 +23,7 @@ class BookDetailPage extends HookConsumerWidget {
     final records = ref.watch(recordsProvider);
     final sections = ref.watch(sectionListProvider);
     final goals = ref.watch(goalsProvider.select((goals) => (goals.value ?? [])
-        .where((goal) => (goal.bookId == argument.book.id) && !goal.reflected)
+        .where((goal) => (goal.bookId == argument.book.id))
         .toList()));
 
     return DefaultTabController(
@@ -61,7 +61,7 @@ class BookDetailPage extends HookConsumerWidget {
             heatMapTabView(
                 context, ref, argument.book, records, sections, goals),
             detailTabView(context, argument.book, goals),
-            historyTabView(records, argument.book, ref),
+            historyTabView(context, records, argument.book, goals, ref),
           ],
         ),
         floatingActionButton: FloatingActionButton(

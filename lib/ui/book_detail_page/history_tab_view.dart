@@ -5,6 +5,8 @@ import 'package:leadstudy/model/book_model.dart';
 import 'package:leadstudy/model/record_model.dart';
 import 'package:leadstudy/stream/provider.dart';
 
+import '../../model/goal_model.dart';
+
 Widget activityLogCard(
     BuildContext context, Book book, Record record, WidgetRef ref) {
   final averageMin =
@@ -57,8 +59,8 @@ Widget activityLogCard(
   );
 }
 
-Widget historyTabView(
-    AsyncValue<List<Record>> records, Book book, WidgetRef ref) {
+Widget recordTabView(BuildContext context, AsyncValue<List<Record>> records,
+    Book book, WidgetRef ref) {
   return records.when(
     data: ((data) {
       return ListView.builder(
@@ -75,5 +77,49 @@ Widget historyTabView(
     loading: (() => const Center(
           child: CircularProgressIndicator(),
         )),
+  );
+}
+
+Widget goalTabView(BuildContext context, List<Goal> goals, WidgetRef ref) {
+  final filteredGoals = goals.where((goal) => goal.reflected).toList();
+  return ListView.builder(
+    itemCount: filteredGoals.length,
+    itemBuilder: ((context, index) {
+      final goal = filteredGoals[index];
+      return Card(
+        child: ListTile(
+          title: Text(
+            "${goal.start}~${goal.last}",
+          ),
+          subtitle: Text(
+              "${DateFormat('yyyy年MM月dd日').format(goal.startedAt)} から ${goal.day}日間"),
+        ),
+      );
+    }),
+  );
+}
+
+Widget historyTabView(BuildContext context, AsyncValue<List<Record>> records,
+    Book book, List<Goal> goals, WidgetRef ref) {
+  return DefaultTabController(
+    length: 2,
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        Container(
+          child: const TabBar(tabs: [
+            Tab(text: "記録"),
+            Tab(text: "目標"),
+          ]),
+        ),
+        Flexible(
+          //Add this to give height
+          child: TabBarView(children: [
+            recordTabView(context, records, book, ref),
+            goalTabView(context, goals, ref),
+          ]),
+        ),
+      ],
+    ),
   );
 }

@@ -268,9 +268,11 @@ Widget detailTabView(BuildContext context, Book book, List<Goal> goals) {
         ),
         Consumer(
           builder: (context, ref, child) {
+            final filteredGoals =
+                goals.where((goal) => !goal.reflected).toList();
             return Flexible(
               child: ListView.builder(
-                itemCount: goals.length,
+                itemCount: filteredGoals.length,
                 itemBuilder: (context, index) {
                   final data = ref
                       .read(goalsServiceProvider)
