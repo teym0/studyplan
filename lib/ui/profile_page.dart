@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:leadstudy/component/constants.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class ProfilePage extends StatelessWidget {
+import '../view_model/auth_view_model.dart';
+
+class ProfilePage extends ConsumerWidget {
   const ProfilePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("プロフィール"),
@@ -15,11 +17,9 @@ class ProfilePage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(supabase.auth.currentUser!.email.toString()),
             ElevatedButton(
-              onPressed: () {
-                supabase.auth.signOut();
-                Navigator.of(context).pushReplacementNamed('/');
+              onPressed: () async {
+                ref.read(authProvider.notifier).logout();
               },
               child: const Text("ログアウト"),
             ),

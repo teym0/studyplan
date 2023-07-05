@@ -34,7 +34,8 @@ class MyApp extends HookConsumerWidget {
       onGenerateRoute: (settings) {
         switch (settings.name) {
           case "/":
-            return MaterialPageRoute(builder: (context) => const SplashPage());
+            return MaterialPageRoute(
+                builder: (context) => const SplashScreen());
           case "/login":
             return MaterialPageRoute(builder: (context) => const LoginPage());
           case "/register":

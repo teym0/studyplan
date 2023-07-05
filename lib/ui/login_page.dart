@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:leadstudy/component/constants.dart';
 import 'package:leadstudy/service/account_service.dart';
 
-class LoginPage extends StatefulWidget {
+import '../view_model/auth_view_model.dart';
+
+class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  ConsumerState<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends ConsumerState<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _accountViewModel = AccountService();
@@ -53,6 +56,16 @@ class _LoginPageState extends State<LoginPage> {
           ),
           FilledButton(
               onPressed: () async {
+                final bool authenticated = await ref
+                    .read(authProvider.notifier)
+                    .login(_emailController.text, _passwordController.text);
+                if (!authenticated) {
+                  return;
+                }
+                if (!mounted) {
+                  return;
+                }
+                return;
                 final String? loginResult = await _accountViewModel.signIn(
                     _emailController.text, _passwordController.text);
                 if (!mounted) return;

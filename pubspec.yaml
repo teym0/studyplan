@@ -28,6 +28,8 @@ dependencies:
   awesome_dialog: ^3.0.2
   collection: 
   clock: ^1.1.1
+  http:
+  shared_preferences:
 
 
 dev_dependencies:
