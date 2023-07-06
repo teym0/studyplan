@@ -12,11 +12,6 @@ final selectedBookProvider = StateProvider<Book?>((ref) {
   return null;
 });
 
-final booksProvider = StreamProvider<List<Book>>(
-  (ref) => supabase.from('books').stream(primaryKey: ['id']).map(
-      (event) => event.map((e) => Book.fromJson(e)).toList()),
-);
-
 final goalsProvider = StreamProvider<List<Goal>>(
   (ref) => supabase.from('goals').stream(primaryKey: ['id']).map(
       (event) => event.map((e) => Goal.fromJson(e)).toList()),

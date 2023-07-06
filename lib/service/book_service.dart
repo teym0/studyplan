@@ -1,5 +1,4 @@
 import 'package:image_picker/image_picker.dart';
-import 'package:leadstudy/component/constants.dart';
 import 'package:leadstudy/infrastructure/book_repository.dart';
 import 'package:leadstudy/model/book_model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -26,12 +25,11 @@ class BooksService {
       String unitName, String pendingAvatarUrl) async {
     final newBook = Book(
       title: title,
-      userId: supabase.auth.currentUser!.id,
+      userId: -1,
       amount: int.parse(amount),
       unitName: unitName,
       imageUrl: pendingAvatarUrl,
       createdAt: DateTime.now(),
-      working: true,
     );
     return editItem(targetBook, newBook);
   }
@@ -40,13 +38,11 @@ class BooksService {
       String pendingAvatarUrl) async {
     final book = Book(
       title: title,
-      userId: supabase.auth.currentUser!.id,
+      userId: -1,
       amount: int.parse(amount),
       unitName: unitName,
       imageUrl: pendingAvatarUrl,
       createdAt: DateTime.now(),
-      working: true,
-      level: 1,
     );
     return addItem(book);
   }

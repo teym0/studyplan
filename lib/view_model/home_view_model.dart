@@ -1,7 +1,6 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 enum TabType {
-  today,
   books,
   profile,
 }

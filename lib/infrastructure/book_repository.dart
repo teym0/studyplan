@@ -1,18 +1,22 @@
+import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:http/http.dart' as http;
 import 'package:leadstudy/component/constants.dart';
 import 'package:leadstudy/model/book_model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class BookRepository {
-  Future<List<Book>> selectItem() async {
-    final result = await supabase.from("books").select();
-    final List<Book> books =
-        result.map((book) => Book.fromJson(book)).toList().cast<Book>();
-    final filtered = books
-        .where((book) => book.userId == supabase.auth.currentUser!.id)
-        .toList();
-    return filtered;
+  Future<List<Book>> selectItems(String token) async {
+    Map<String, String> headers = {
+      'content-type': 'application/json',
+      'Authorization': 'Bearer $token'
+    };
+    final res = await http.get(Uri.parse("http://127.0.0.1:7000/api/v1/books/"),
+        headers: headers);
+    final List body = jsonDecode(res.body);
+    final List<Book> books = body.map((book) => Book.fromJson(book)).toList();
+    return books;
   }
 
   Future<Book> createItem(Book book) async {

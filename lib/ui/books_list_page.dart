@@ -5,7 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:leadstudy/model/book_model.dart';
 import 'package:leadstudy/ui/edit_book_page.dart';
 
-import '../stream/provider.dart';
+import '../view_model/book_view_model.dart';
 import '../view_model/section_view_model.dart';
 import 'book_detail_page/book_detail_page.dart';
 

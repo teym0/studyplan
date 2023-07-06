@@ -29,16 +29,12 @@ mixin _$Book {
   DateTime get createdAt => throw _privateConstructorUsedError;
   @JsonKey(name: 'amount')
   int get amount => throw _privateConstructorUsedError;
-  @JsonKey(name: 'working')
-  bool get working => throw _privateConstructorUsedError;
   @JsonKey(name: 'unit_name')
   String get unitName => throw _privateConstructorUsedError;
-  @JsonKey(name: 'user_id')
-  String get userId => throw _privateConstructorUsedError;
-  @JsonKey(name: 'image_url')
+  @JsonKey(name: 'user')
+  int get userId => throw _privateConstructorUsedError;
+  @JsonKey(name: 'image')
   String? get imageUrl => throw _privateConstructorUsedError;
-  @JsonKey(name: 'level')
-  int? get level => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -55,11 +51,9 @@ abstract class $BookCopyWith<$Res> {
       @JsonKey(name: 'title') String title,
       @DatetimeJsonConverter() @JsonKey(name: 'created_at') DateTime createdAt,
       @JsonKey(name: 'amount') int amount,
-      @JsonKey(name: 'working') bool working,
       @JsonKey(name: 'unit_name') String unitName,
-      @JsonKey(name: 'user_id') String userId,
-      @JsonKey(name: 'image_url') String? imageUrl,
-      @JsonKey(name: 'level') int? level});
+      @JsonKey(name: 'user') int userId,
+      @JsonKey(name: 'image') String? imageUrl});
 }
 
 /// @nodoc
@@ -79,11 +73,9 @@ class _$BookCopyWithImpl<$Res, $Val extends Book>
     Object? title = null,
     Object? createdAt = null,
     Object? amount = null,
-    Object? working = null,
     Object? unitName = null,
     Object? userId = null,
     Object? imageUrl = freezed,
-    Object? level = freezed,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
@@ -102,10 +94,6 @@ class _$BookCopyWithImpl<$Res, $Val extends Book>
           ? _value.amount
           : amount // ignore: cast_nullable_to_non_nullable
               as int,
-      working: null == working
-          ? _value.working
-          : working // ignore: cast_nullable_to_non_nullable
-              as bool,
       unitName: null == unitName
           ? _value.unitName
           : unitName // ignore: cast_nullable_to_non_nullable
@@ -113,15 +101,11 @@ class _$BookCopyWithImpl<$Res, $Val extends Book>
       userId: null == userId
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
-              as String,
+              as int,
       imageUrl: freezed == imageUrl
           ? _value.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
               as String?,
-      level: freezed == level
-          ? _value.level
-          : level // ignore: cast_nullable_to_non_nullable
-              as int?,
     ) as $Val);
   }
 }
@@ -137,11 +121,9 @@ abstract class _$$_BookCopyWith<$Res> implements $BookCopyWith<$Res> {
       @JsonKey(name: 'title') String title,
       @DatetimeJsonConverter() @JsonKey(name: 'created_at') DateTime createdAt,
       @JsonKey(name: 'amount') int amount,
-      @JsonKey(name: 'working') bool working,
       @JsonKey(name: 'unit_name') String unitName,
-      @JsonKey(name: 'user_id') String userId,
-      @JsonKey(name: 'image_url') String? imageUrl,
-      @JsonKey(name: 'level') int? level});
+      @JsonKey(name: 'user') int userId,
+      @JsonKey(name: 'image') String? imageUrl});
 }
 
 /// @nodoc
@@ -157,11 +139,9 @@ class __$$_BookCopyWithImpl<$Res> extends _$BookCopyWithImpl<$Res, _$_Book>
     Object? title = null,
     Object? createdAt = null,
     Object? amount = null,
-    Object? working = null,
     Object? unitName = null,
     Object? userId = null,
     Object? imageUrl = freezed,
-    Object? level = freezed,
   }) {
     return _then(_$_Book(
       id: freezed == id
@@ -180,10 +160,6 @@ class __$$_BookCopyWithImpl<$Res> extends _$BookCopyWithImpl<$Res, _$_Book>
           ? _value.amount
           : amount // ignore: cast_nullable_to_non_nullable
               as int,
-      working: null == working
-          ? _value.working
-          : working // ignore: cast_nullable_to_non_nullable
-              as bool,
       unitName: null == unitName
           ? _value.unitName
           : unitName // ignore: cast_nullable_to_non_nullable
@@ -191,15 +167,11 @@ class __$$_BookCopyWithImpl<$Res> extends _$BookCopyWithImpl<$Res, _$_Book>
       userId: null == userId
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
-              as String,
+              as int,
       imageUrl: freezed == imageUrl
           ? _value.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
               as String?,
-      level: freezed == level
-          ? _value.level
-          : level // ignore: cast_nullable_to_non_nullable
-              as int?,
     ));
   }
 }
@@ -218,16 +190,12 @@ class _$_Book implements _Book {
           required this.createdAt,
       @JsonKey(name: 'amount')
           required this.amount,
-      @JsonKey(name: 'working')
-          required this.working,
       @JsonKey(name: 'unit_name')
           required this.unitName,
-      @JsonKey(name: 'user_id')
+      @JsonKey(name: 'user')
           required this.userId,
-      @JsonKey(name: 'image_url')
-          this.imageUrl,
-      @JsonKey(name: 'level')
-          this.level});
+      @JsonKey(name: 'image')
+          this.imageUrl});
 
   factory _$_Book.fromJson(Map<String, dynamic> json) => _$$_BookFromJson(json);
 
@@ -245,24 +213,18 @@ class _$_Book implements _Book {
   @JsonKey(name: 'amount')
   final int amount;
   @override
-  @JsonKey(name: 'working')
-  final bool working;
-  @override
   @JsonKey(name: 'unit_name')
   final String unitName;
   @override
-  @JsonKey(name: 'user_id')
-  final String userId;
+  @JsonKey(name: 'user')
+  final int userId;
   @override
-  @JsonKey(name: 'image_url')
+  @JsonKey(name: 'image')
   final String? imageUrl;
-  @override
-  @JsonKey(name: 'level')
-  final int? level;
 
   @override
   String toString() {
-    return 'Book(id: $id, title: $title, createdAt: $createdAt, amount: $amount, working: $working, unitName: $unitName, userId: $userId, imageUrl: $imageUrl, level: $level)';
+    return 'Book(id: $id, title: $title, createdAt: $createdAt, amount: $amount, unitName: $unitName, userId: $userId, imageUrl: $imageUrl)';
   }
 
   @override
@@ -275,19 +237,17 @@ class _$_Book implements _Book {
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
             (identical(other.amount, amount) || other.amount == amount) &&
-            (identical(other.working, working) || other.working == working) &&
             (identical(other.unitName, unitName) ||
                 other.unitName == unitName) &&
             (identical(other.userId, userId) || other.userId == userId) &&
             (identical(other.imageUrl, imageUrl) ||
-                other.imageUrl == imageUrl) &&
-            (identical(other.level, level) || other.level == level));
+                other.imageUrl == imageUrl));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, title, createdAt, amount,
-      working, unitName, userId, imageUrl, level);
+  int get hashCode => Object.hash(
+      runtimeType, id, title, createdAt, amount, unitName, userId, imageUrl);
 
   @JsonKey(ignore: true)
   @override
@@ -314,16 +274,12 @@ abstract class _Book implements Book {
           required final DateTime createdAt,
       @JsonKey(name: 'amount')
           required final int amount,
-      @JsonKey(name: 'working')
-          required final bool working,
       @JsonKey(name: 'unit_name')
           required final String unitName,
-      @JsonKey(name: 'user_id')
-          required final String userId,
-      @JsonKey(name: 'image_url')
-          final String? imageUrl,
-      @JsonKey(name: 'level')
-          final int? level}) = _$_Book;
+      @JsonKey(name: 'user')
+          required final int userId,
+      @JsonKey(name: 'image')
+          final String? imageUrl}) = _$_Book;
 
   factory _Book.fromJson(Map<String, dynamic> json) = _$_Book.fromJson;
 
@@ -341,20 +297,14 @@ abstract class _Book implements Book {
   @JsonKey(name: 'amount')
   int get amount;
   @override
-  @JsonKey(name: 'working')
-  bool get working;
-  @override
   @JsonKey(name: 'unit_name')
   String get unitName;
   @override
-  @JsonKey(name: 'user_id')
-  String get userId;
+  @JsonKey(name: 'user')
+  int get userId;
   @override
-  @JsonKey(name: 'image_url')
+  @JsonKey(name: 'image')
   String? get imageUrl;
-  @override
-  @JsonKey(name: 'level')
-  int? get level;
   @override
   @JsonKey(ignore: true)
   _$$_BookCopyWith<_$_Book> get copyWith => throw _privateConstructorUsedError;

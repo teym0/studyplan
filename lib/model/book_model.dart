@@ -13,13 +13,11 @@ class Book with _$Book {
     @JsonKey(name: 'title') required String title,
     @DatetimeJsonConverter()
     @JsonKey(name: 'created_at')
-        required DateTime createdAt,
+    required DateTime createdAt,
     @JsonKey(name: 'amount') required int amount,
-    @JsonKey(name: 'working') required bool working,
     @JsonKey(name: 'unit_name') required String unitName,
-    @JsonKey(name: 'user_id') required String userId,
-    @JsonKey(name: 'image_url') String? imageUrl,
-    @JsonKey(name: 'level') int? level,
+    @JsonKey(name: 'user') required int userId,
+    @JsonKey(name: 'image') String? imageUrl,
   }) = _Book;
 
   factory Book.fromJson(Map<String, dynamic> json) => _$BookFromJson(json);

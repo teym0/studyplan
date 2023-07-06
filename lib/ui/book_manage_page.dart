@@ -5,6 +5,8 @@ import 'package:leadstudy/model/book_model.dart';
 import 'package:leadstudy/stream/provider.dart';
 import 'package:leadstudy/ui/edit_book_page.dart';
 
+import '../view_model/book_view_model.dart';
+
 class BooksManagePage extends HookConsumerWidget {
   const BooksManagePage({super.key});
 
