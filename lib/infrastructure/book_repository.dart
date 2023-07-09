@@ -51,7 +51,7 @@ class BookRepository {
     });
   }
 
-  Future<void> updateItem(Book newBook, Uint8List imagebytes) async {
+  Future<void> updateItem(Book newBook, Uint8List? imagebytes) async {
     print(newBook.id);
     final token = ref.read(authProvider).value!.access;
     Map<String, String> headers = {'Authorization': 'Bearer $token'};
@@ -60,11 +60,17 @@ class BookRepository {
       "PUT",
       uri,
     );
-    final multipartFile =
-        http.MultipartFile.fromBytes('image', imagebytes, filename: "test.jpg");
-    request.files.add(multipartFile);
+    if (imagebytes != null) {
+      final multipartFile = http.MultipartFile.fromBytes('image', imagebytes,
+          filename: "test.jpg");
+      request.files.add(multipartFile);
+    }
     request.headers.addAll(headers);
-    newBook.toJson().forEach((k, v) => request.fields[k] = v.toString());
+    newBook.toJson().forEach((k, v) {
+      if (k != "image") {
+        request.fields[k] = v.toString();
+      }
+    });
     final stream = await request.send();
     http.Response.fromStream(stream).then((response) {
       if (response.statusCode == 200) {

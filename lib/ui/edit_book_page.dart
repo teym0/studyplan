@@ -1,11 +1,14 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:leadstudy/model/book_model.dart';
 import 'package:leadstudy/model/section_model.dart';
-import 'package:leadstudy/view_model/book_view_model.dart';
 import 'package:leadstudy/view_model/edit_section_view_model.dart';
+
+import '../view_model/book_view_model.dart';
 
 class BookEditScreenArgument {
   Book? book;
@@ -21,7 +24,7 @@ class EditBookPage extends ConsumerStatefulWidget {
 }
 
 class EditBookState extends ConsumerState<EditBookPage> {
-  Uint8List? pendingTitleImageState;
+  File? pendingTitleImageFileState;
   final titleControllerState = TextEditingController();
   final amountControllerState = TextEditingController();
   final unitController = TextEditingController(text: "ページ");
@@ -35,9 +38,6 @@ class EditBookState extends ConsumerState<EditBookPage> {
       amountControllerState.text = book.amount.toString();
       WidgetsBinding.instance.addPostFrameCallback((_) {
         unitController.text = book.unitName;
-        if (book.imageUrl != null) {
-          pendingTitleImageState = null;
-        }
         Future(() async {
           // final sections =
           //     await ref.read(sectionListProvider.notifier).getSections(book);
@@ -52,10 +52,62 @@ class EditBookState extends ConsumerState<EditBookPage> {
     final XFile? pickedFile =
         await picker.pickImage(source: ImageSource.gallery);
     if (pickedFile == null) return;
-    final Uint8List bytes = await pickedFile.readAsBytes();
     setState(() {
-      pendingTitleImageState = bytes;
+      pendingTitleImageFileState = File(pickedFile.path);
     });
+  }
+
+  Widget pendingBookImage(Size screenSize) {
+    if (pendingTitleImageFileState != null) {
+      return GestureDetector(
+        onTap: () {
+          pickAndSetImage(ref);
+        },
+        child: SizedBox(
+          width: screenSize.width * 0.25,
+          height: screenSize.width * 0.25 * 1.3,
+          child: Image.file(
+            pendingTitleImageFileState!,
+            fit: BoxFit.contain,
+          ),
+        ),
+      );
+    }
+    if (widget.args.book?.imageUrl != null) {
+      return GestureDetector(
+        onTap: () {
+          pickAndSetImage(ref);
+        },
+        child: SizedBox(
+          width: screenSize.width * 0.25,
+          height: screenSize.width * 0.25 * 1.3,
+          child: Image.network(
+            widget.args.book!.imageUrl!,
+            fit: BoxFit.contain,
+          ),
+        ),
+      );
+    }
+    return GestureDetector(
+      onTap: () {
+        pickAndSetImage(ref);
+      },
+      child: Container(
+        width: screenSize.width * 0.25,
+        height: screenSize.width * 0.25 * 1.3,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: Colors.grey.withOpacity(0.3),
+        ),
+        child: const Center(
+          child: Text(
+            "未設定",
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      ),
+    );
   }
 
   @override
@@ -82,40 +134,7 @@ class EditBookState extends ConsumerState<EditBookPage> {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    (pendingTitleImageState == null)
-                        ? GestureDetector(
-                            onTap: () {
-                              pickAndSetImage(ref);
-                            },
-                            child: Container(
-                              width: screenSize.width * 0.25,
-                              height: screenSize.width * 0.25 * 1.3,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Colors.grey.withOpacity(0.3),
-                              ),
-                              child: const Center(
-                                child: Text(
-                                  "未設定",
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ),
-                          )
-                        : GestureDetector(
-                            onTap: () {
-                              pickAndSetImage(ref);
-                            },
-                            child: SizedBox(
-                              width: screenSize.width * 0.25,
-                              height: screenSize.width * 0.25 * 1.3,
-                              child: Image.memory(
-                                pendingTitleImageState!,
-                                fit: BoxFit.contain,
-                              ),
-                            ),
-                          ),
+                    pendingBookImage(screenSize),
                     Padding(
                       padding: const EdgeInsets.all(4.0),
                       child: Column(
@@ -137,12 +156,12 @@ class EditBookState extends ConsumerState<EditBookPage> {
                             label: const Text("画像をアップロード"),
                             icon: const Icon(Icons.upload_outlined),
                           ),
-                          (pendingTitleImageState == null)
+                          (pendingTitleImageFileState == null)
                               ? Container()
                               : TextButton.icon(
                                   onPressed: () {
                                     setState(() {
-                                      pendingTitleImageState = null;
+                                      pendingTitleImageFileState = null;
                                     });
                                   },
                                   style: ButtonStyle(
@@ -254,7 +273,7 @@ class EditBookState extends ConsumerState<EditBookPage> {
                           );
                           await ref
                               .read(booksProvider.notifier)
-                              .create(book, pendingTitleImageState!);
+                              .create(book, pendingTitleImageFileState!);
                         } else {
                           final Book newBook = widget.args.book!.copyWith(
                             title: titleControllerState.text,
@@ -264,7 +283,7 @@ class EditBookState extends ConsumerState<EditBookPage> {
                           );
                           await ref
                               .read(booksProvider.notifier)
-                              .update(newBook, pendingTitleImageState!);
+                              .update(newBook, pendingTitleImageFileState);
 
                           // await ref
                           //     .read(sectionListProvider.notifier)

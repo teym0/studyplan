@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -30,17 +31,22 @@ class BookViewModel extends StateNotifier<AsyncValue<List<Book>>> {
   }
 
   Future<void> delete(Book book) async {
-    bookRepository.deleteItem(book);
-    _reload();
+    await bookRepository.deleteItem(book);
+    await _reload();
   }
 
-  Future<void> create(Book book, Uint8List image) async {
-    bookRepository.createItem(book, image);
-    _reload();
+  Future<void> create(Book book, File image) async {
+    final imageBytes = await image.readAsBytes();
+    await bookRepository.createItem(book, imageBytes);
+    await _reload();
   }
 
-  Future<void> update(Book newBook, Uint8List image) async {
-    bookRepository.updateItem(newBook, image);
-    _reload();
+  Future<void> update(Book newBook, File? image) async {
+    Uint8List? imageBytes;
+    if (image != null) {
+      imageBytes = await image.readAsBytes();
+    }
+    await bookRepository.updateItem(newBook, imageBytes);
+    await _reload();
   }
 }
