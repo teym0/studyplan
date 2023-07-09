@@ -13,7 +13,7 @@ _$_Book _$$_BookFromJson(Map<String, dynamic> json) => _$_Book(
           const DatetimeJsonConverter().fromJson(json['created_at'] as String),
       amount: json['amount'] as int,
       unitName: json['unit_name'] as String,
-      userId: json['user'] as int,
+      userId: json['user'] as int?,
       imageUrl: json['image'] as String?,
     );
 
@@ -31,7 +31,7 @@ Map<String, dynamic> _$$_BookToJson(_$_Book instance) {
   val['created_at'] = const DatetimeJsonConverter().toJson(instance.createdAt);
   val['amount'] = instance.amount;
   val['unit_name'] = instance.unitName;
-  val['user'] = instance.userId;
+  writeNotNull('user', instance.userId);
   writeNotNull('image', instance.imageUrl);
   return val;
 }

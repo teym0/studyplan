@@ -16,7 +16,7 @@ class Book with _$Book {
     required DateTime createdAt,
     @JsonKey(name: 'amount') required int amount,
     @JsonKey(name: 'unit_name') required String unitName,
-    @JsonKey(name: 'user') required int userId,
+    @JsonKey(name: 'user') int? userId,
     @JsonKey(name: 'image') String? imageUrl,
   }) = _Book;
 

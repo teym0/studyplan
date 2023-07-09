@@ -1,5 +1,4 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:leadstudy/service/book_service.dart';
 import 'package:leadstudy/service/goal_service.dart';
 import 'package:leadstudy/service/record_service.dart';
 
@@ -29,6 +28,5 @@ final recordsProvider = StreamProvider<List<Record>>((ref) {
       .map((event) => event.map((e) => Record.fromJson(e)).toList());
 });
 
-final booksServiceProvider = Provider((ref) => BooksService());
 final goalsServiceProvider = Provider((ref) => GoalsService(ref));
 final recordServiceProvider = Provider((ref) => RecordService());

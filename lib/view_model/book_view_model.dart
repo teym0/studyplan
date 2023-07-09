@@ -1,31 +1,46 @@
+import 'dart:typed_data';
+
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:leadstudy/infrastructure/book_repository.dart';
-import 'package:leadstudy/view_model/auth_view_model.dart';
 
 import '../model/book_model.dart';
 
-final bookRepositoryProvider = Provider((ref) => BookRepository());
+final bookRepositoryProvider = Provider((ref) => BookRepository(ref: ref));
 
 final booksProvider =
     StateNotifierProvider<BookViewModel, AsyncValue<List<Book>>>((ref) {
-  return BookViewModel(ref);
+  final bookRepository = ref.read(bookRepositoryProvider);
+  return BookViewModel(bookRepository);
 });
 
 class BookViewModel extends StateNotifier<AsyncValue<List<Book>>> {
-  BookViewModel(this.ref) : super(const AsyncValue.loading()) {
+  BookViewModel(this.bookRepository) : super(const AsyncValue.loading()) {
     initialize();
   }
 
-  Ref ref;
+  BookRepository bookRepository;
 
   Future<void> initialize() async {
-    print("initialize");
-    final userdata = ref.watch(authProvider);
-    if (userdata.hasValue) {
-      final List<Book> books = await ref
-          .read(bookRepositoryProvider)
-          .selectItems(userdata.value!.access);
-      state = AsyncValue.data(books);
-    }
+    _reload();
+  }
+
+  Future<void> _reload() async {
+    final List<Book> books = await bookRepository.selectItems();
+    state = AsyncValue.data(books);
+  }
+
+  Future<void> delete(Book book) async {
+    bookRepository.deleteItem(book);
+    _reload();
+  }
+
+  Future<void> create(Book book, Uint8List image) async {
+    bookRepository.createItem(book, image);
+    _reload();
+  }
+
+  Future<void> update(Book newBook, Uint8List image) async {
+    bookRepository.updateItem(newBook, image);
+    _reload();
   }
 }

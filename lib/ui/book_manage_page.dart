@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:leadstudy/model/book_model.dart';
-import 'package:leadstudy/stream/provider.dart';
 import 'package:leadstudy/ui/edit_book_page.dart';
 
 import '../view_model/book_view_model.dart';
@@ -41,8 +40,8 @@ class BooksManagePage extends HookConsumerWidget {
                               onPressed: () async {
                                 Navigator.pop(context);
                                 await ref
-                                    .read(booksServiceProvider)
-                                    .deleteItem(books[index]);
+                                    .read(booksProvider.notifier)
+                                    .delete(books[index]);
                               },
                               child: const Text("削除"),
                             ),

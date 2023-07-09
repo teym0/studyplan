@@ -32,7 +32,7 @@ mixin _$Book {
   @JsonKey(name: 'unit_name')
   String get unitName => throw _privateConstructorUsedError;
   @JsonKey(name: 'user')
-  int get userId => throw _privateConstructorUsedError;
+  int? get userId => throw _privateConstructorUsedError;
   @JsonKey(name: 'image')
   String? get imageUrl => throw _privateConstructorUsedError;
 
@@ -52,7 +52,7 @@ abstract class $BookCopyWith<$Res> {
       @DatetimeJsonConverter() @JsonKey(name: 'created_at') DateTime createdAt,
       @JsonKey(name: 'amount') int amount,
       @JsonKey(name: 'unit_name') String unitName,
-      @JsonKey(name: 'user') int userId,
+      @JsonKey(name: 'user') int? userId,
       @JsonKey(name: 'image') String? imageUrl});
 }
 
@@ -74,7 +74,7 @@ class _$BookCopyWithImpl<$Res, $Val extends Book>
     Object? createdAt = null,
     Object? amount = null,
     Object? unitName = null,
-    Object? userId = null,
+    Object? userId = freezed,
     Object? imageUrl = freezed,
   }) {
     return _then(_value.copyWith(
@@ -98,10 +98,10 @@ class _$BookCopyWithImpl<$Res, $Val extends Book>
           ? _value.unitName
           : unitName // ignore: cast_nullable_to_non_nullable
               as String,
-      userId: null == userId
+      userId: freezed == userId
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
       imageUrl: freezed == imageUrl
           ? _value.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
@@ -122,7 +122,7 @@ abstract class _$$_BookCopyWith<$Res> implements $BookCopyWith<$Res> {
       @DatetimeJsonConverter() @JsonKey(name: 'created_at') DateTime createdAt,
       @JsonKey(name: 'amount') int amount,
       @JsonKey(name: 'unit_name') String unitName,
-      @JsonKey(name: 'user') int userId,
+      @JsonKey(name: 'user') int? userId,
       @JsonKey(name: 'image') String? imageUrl});
 }
 
@@ -140,7 +140,7 @@ class __$$_BookCopyWithImpl<$Res> extends _$BookCopyWithImpl<$Res, _$_Book>
     Object? createdAt = null,
     Object? amount = null,
     Object? unitName = null,
-    Object? userId = null,
+    Object? userId = freezed,
     Object? imageUrl = freezed,
   }) {
     return _then(_$_Book(
@@ -164,10 +164,10 @@ class __$$_BookCopyWithImpl<$Res> extends _$BookCopyWithImpl<$Res, _$_Book>
           ? _value.unitName
           : unitName // ignore: cast_nullable_to_non_nullable
               as String,
-      userId: null == userId
+      userId: freezed == userId
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
       imageUrl: freezed == imageUrl
           ? _value.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
@@ -193,7 +193,7 @@ class _$_Book implements _Book {
       @JsonKey(name: 'unit_name')
           required this.unitName,
       @JsonKey(name: 'user')
-          required this.userId,
+          this.userId,
       @JsonKey(name: 'image')
           this.imageUrl});
 
@@ -217,7 +217,7 @@ class _$_Book implements _Book {
   final String unitName;
   @override
   @JsonKey(name: 'user')
-  final int userId;
+  final int? userId;
   @override
   @JsonKey(name: 'image')
   final String? imageUrl;
@@ -277,7 +277,7 @@ abstract class _Book implements Book {
       @JsonKey(name: 'unit_name')
           required final String unitName,
       @JsonKey(name: 'user')
-          required final int userId,
+          final int? userId,
       @JsonKey(name: 'image')
           final String? imageUrl}) = _$_Book;
 
@@ -301,7 +301,7 @@ abstract class _Book implements Book {
   String get unitName;
   @override
   @JsonKey(name: 'user')
-  int get userId;
+  int? get userId;
   @override
   @JsonKey(name: 'image')
   String? get imageUrl;

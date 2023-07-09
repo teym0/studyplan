@@ -4,18 +4,13 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:leadstudy/model/book_model.dart';
 import 'package:leadstudy/model/section_model.dart';
-import 'package:leadstudy/stream/provider.dart';
+import 'package:leadstudy/view_model/book_view_model.dart';
 import 'package:leadstudy/view_model/edit_section_view_model.dart';
-
-import '../view_model/section_view_model.dart';
 
 class BookEditScreenArgument {
   Book? book;
   BookEditScreenArgument(this.book);
 }
-
-final pendingTitleImageProvider =
-    StateProvider.autoDispose<String>((ref) => "");
 
 class EditBookPage extends ConsumerStatefulWidget {
   const EditBookPage(this.args, {Key? key}) : super(key: key);
@@ -26,6 +21,7 @@ class EditBookPage extends ConsumerStatefulWidget {
 }
 
 class EditBookState extends ConsumerState<EditBookPage> {
+  Uint8List? pendingTitleImageState;
   final titleControllerState = TextEditingController();
   final amountControllerState = TextEditingController();
   final unitController = TextEditingController(text: "ページ");
@@ -40,36 +36,31 @@ class EditBookState extends ConsumerState<EditBookPage> {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         unitController.text = book.unitName;
         if (book.imageUrl != null) {
-          ref
-              .read(pendingTitleImageProvider.notifier)
-              .update((state) => book.imageUrl!);
+          pendingTitleImageState = null;
         }
         Future(() async {
-          final sections =
-              await ref.read(sectionListProvider.notifier).getSections(book);
-          ref.read(editSectionProvider.notifier).setSections(sections);
+          // final sections =
+          //     await ref.read(sectionListProvider.notifier).getSections(book);
+          // ref.read(editSectionProvider.notifier).setSections(sections);
         });
       });
     }
   }
 
-  Future pickImageAndUpload(WidgetRef ref) async {
+  Future pickAndSetImage(WidgetRef ref) async {
     final picker = ImagePicker();
     final XFile? pickedFile =
         await picker.pickImage(source: ImageSource.gallery);
-    if (pickedFile == null) {
-      return;
-    }
-    final imageUrl =
-        await ref.read(booksServiceProvider).uploadImage(pickedFile);
-    final pendingAvatar = ref.read(pendingTitleImageProvider.notifier);
-    pendingAvatar.state = imageUrl;
+    if (pickedFile == null) return;
+    final Uint8List bytes = await pickedFile.readAsBytes();
+    setState(() {
+      pendingTitleImageState = bytes;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
-    final pendingTitleImage = ref.watch(pendingTitleImageProvider);
 
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
@@ -91,10 +82,10 @@ class EditBookState extends ConsumerState<EditBookPage> {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    (pendingTitleImage == "")
+                    (pendingTitleImageState == null)
                         ? GestureDetector(
                             onTap: () {
-                              pickImageAndUpload(ref);
+                              pickAndSetImage(ref);
                             },
                             child: Container(
                               width: screenSize.width * 0.25,
@@ -114,13 +105,13 @@ class EditBookState extends ConsumerState<EditBookPage> {
                           )
                         : GestureDetector(
                             onTap: () {
-                              pickImageAndUpload(ref);
+                              pickAndSetImage(ref);
                             },
                             child: SizedBox(
                               width: screenSize.width * 0.25,
                               height: screenSize.width * 0.25 * 1.3,
-                              child: Image.network(
-                                pendingTitleImage,
+                              child: Image.memory(
+                                pendingTitleImageState!,
                                 fit: BoxFit.contain,
                               ),
                             ),
@@ -141,22 +132,18 @@ class EditBookState extends ConsumerState<EditBookPage> {
                           ),
                           TextButton.icon(
                             onPressed: () {
-                              pickImageAndUpload(ref);
+                              pickAndSetImage(ref);
                             },
                             label: const Text("画像をアップロード"),
                             icon: const Icon(Icons.upload_outlined),
                           ),
-                          (pendingTitleImage == "")
+                          (pendingTitleImageState == null)
                               ? Container()
                               : TextButton.icon(
                                   onPressed: () {
-                                    ref
-                                        .read(
-                                            pendingTitleImageProvider.notifier)
-                                        .state = "";
-                                    ref
-                                        .read(booksServiceProvider)
-                                        .deleteImage(pendingTitleImage);
+                                    setState(() {
+                                      pendingTitleImageState = null;
+                                    });
                                   },
                                   style: ButtonStyle(
                                       foregroundColor:
@@ -259,29 +246,35 @@ class EditBookState extends ConsumerState<EditBookPage> {
                       onPressed: () async {
                         late Book book;
                         if (widget.args.book == null) {
-                          book = await ref.read(booksServiceProvider).addBook(
-                                titleControllerState.text,
-                                amountControllerState.text,
-                                unitController.text,
-                                pendingTitleImage,
-                              );
-                        } else {
-                          book = await ref.read(booksServiceProvider).editBook(
-                                widget.args.book!,
-                                titleControllerState.text,
-                                amountControllerState.text,
-                                unitController.text,
-                                pendingTitleImage,
-                              );
+                          book = Book(
+                            title: titleControllerState.text,
+                            createdAt: DateTime.now(),
+                            amount: int.parse(amountControllerState.text),
+                            unitName: unitController.text,
+                          );
                           await ref
-                              .read(sectionListProvider.notifier)
-                              .deleteAllItems(book.id!);
+                              .read(booksProvider.notifier)
+                              .create(book, pendingTitleImageState!);
+                        } else {
+                          final Book newBook = widget.args.book!.copyWith(
+                            title: titleControllerState.text,
+                            createdAt: DateTime.now(),
+                            amount: int.parse(amountControllerState.text),
+                            unitName: unitController.text,
+                          );
+                          await ref
+                              .read(booksProvider.notifier)
+                              .update(newBook, pendingTitleImageState!);
+
+                          // await ref
+                          //     .read(sectionListProvider.notifier)
+                          //     .deleteAllItems(book.id!);
                         }
                         final List<Section> sections =
                             await ref.read(editSectionProvider);
-                        await ref
-                            .read(sectionListProvider.notifier)
-                            .addMultipleItems(sections, book);
+                        // await ref
+                        //     .read(sectionListProvider.notifier)
+                        //     .addMultipleItems(sections, book);
                         Navigator.of(context).pop();
                       },
                       label: (widget.args.book == null)
